@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SelectAllTableViewCell" id="KGk-i7-Jjw" customClass="SelectAllTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TMU-sW-tAv">
+                        <rect key="frame" x="83" y="12" width="189" height="20"/>
+                        <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
+                        <color key="textColor" red="0.3803921569" green="0.3803921569" blue="0.3803921569" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CeV-ZF-QTT">
+                        <rect key="frame" x="277" y="7" width="28" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="28" id="0uD-qS-Guw"/>
+                        </constraints>
+                        <state key="normal" image="locationUnSelected">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <state key="selected" image="locationSelected"/>
+                    </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="selectAll" translatesAutoresizingMaskIntoConstraints="NO" id="z27-A1-UhC">
+                        <rect key="frame" x="31" y="10" width="27" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="27" id="Cgc-7V-BMg"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="TMU-sW-tAv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="16r-H8-qBA"/>
+                    <constraint firstAttribute="bottom" secondItem="TMU-sW-tAv" secondAttribute="bottom" constant="12" id="ART-v5-hcN"/>
+                    <constraint firstItem="CeV-ZF-QTT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="DDZ-zV-LYn"/>
+                    <constraint firstItem="TMU-sW-tAv" firstAttribute="leading" secondItem="z27-A1-UhC" secondAttribute="trailing" constant="25" id="FaZ-qq-SYw"/>
+                    <constraint firstAttribute="bottom" secondItem="z27-A1-UhC" secondAttribute="bottom" constant="10" id="TEa-aO-JoV"/>
+                    <constraint firstItem="z27-A1-UhC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="31" id="YMY-L2-NVU"/>
+                    <constraint firstAttribute="bottom" secondItem="CeV-ZF-QTT" secondAttribute="bottom" constant="9" id="e16-k1-mWE"/>
+                    <constraint firstItem="z27-A1-UhC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="gwo-Ps-aY0"/>
+                    <constraint firstItem="CeV-ZF-QTT" firstAttribute="leading" secondItem="TMU-sW-tAv" secondAttribute="trailing" constant="5" id="ioh-es-v6T"/>
+                    <constraint firstAttribute="trailing" secondItem="CeV-ZF-QTT" secondAttribute="trailing" constant="15" id="oOT-5M-KZs"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="contactImageView" destination="z27-A1-UhC" id="H6g-Xr-mg6"/>
+                <outlet property="contactNameLabel" destination="TMU-sW-tAv" id="nol-oK-63a"/>
+                <outlet property="selectionButton" destination="CeV-ZF-QTT" id="KEx-QB-Ydd"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="locationSelected" width="30" height="30"/>
+        <image name="locationUnSelected" width="31" height="31"/>
+        <image name="selectAll" width="27" height="24"/>
+    </resources>
+</document>

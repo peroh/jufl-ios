@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CSAlertView">
+            <connections>
+                <outlet property="btnOk" destination="KDv-u9-VXK" id="czn-P4-ERL"/>
+                <outlet property="lblBody" destination="Urw-34-pKc" id="y7a-jj-kY9"/>
+                <outlet property="lblTitle" destination="4u0-r9-g3l" id="q9Q-d1-jDi"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clipsSubviews="YES" contentMode="scaleToFill" id="1" userLabel="Alert View-OK" customClass="CSAlertView">
+            <rect key="frame" x="0.0" y="0.0" width="268" height="252"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" tag="55" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KDv-u9-VXK">
+                    <rect key="frame" x="7" y="181" width="148" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <color key="backgroundColor" red="0.37216712549999997" green="0.8953777691" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <state key="normal" title="OK">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Around About" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4u0-r9-g3l" userLabel="TitleLabel - Garbage Bin">
+                    <rect key="frame" x="27" y="7" width="215" height="27"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please use this for you custom messgae" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" minimumFontSize="9" id="Urw-34-pKc">
+                    <rect key="frame" x="5" y="41" width="257" height="115"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <nil key="highlightedColor"/>
+                    <string key="userLabel">MessageLabel - ghdjfshsdhfbsdnbvdsnfn nvsdfnvbdnsfvn vnvbnfvdnsfndsvnfndsv nndsvfndsnfvnds nvsnfvnds vnvdsnfvdnsfvn vnsvdfbndsvnfvdnsvf nvsnfv nsvdfn vnvndfvndsvf nvnsdvfndsvfnvs nvnsdvf nvnsvnsdvfnvs nvsdnfvnsvf nsvnvfnnsdvf</string>
+                </label>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlertPlaceHolder.png" id="1Ji-rG-40l">
+                    <rect key="frame" x="157" y="135" width="112" height="117"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="btnOk" destination="KDv-u9-VXK" id="X7T-DH-NsY"/>
+                <outlet property="lblBody" destination="Urw-34-pKc" id="COn-PD-S0K"/>
+                <outlet property="lblTitle" destination="4u0-r9-g3l" id="uda-tm-4RE"/>
+            </connections>
+        </view>
+        <view clipsSubviews="YES" contentMode="scaleToFill" id="Ali-4j-tAW" userLabel="Alert View-Yes-NO" customClass="CSAlertView">
+            <rect key="frame" x="0.0" y="0.0" width="268" height="252"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" tag="55" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tfz-Sb-iG2">
+                    <rect key="frame" x="9" y="161" width="157" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <color key="backgroundColor" red="0.37216712549999997" green="0.8953777691" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <state key="normal" title="OK">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Around About" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QVm-U6-uuf" userLabel="TitleLabel - Garbage Bin">
+                    <rect key="frame" x="27" y="7" width="215" height="27"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" minimumFontSize="9" id="SZd-58-jw8">
+                    <rect key="frame" x="5" y="41" width="257" height="115"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <string key="text">ghdjfshsdhfbsdnbvdsnfn nvsdfnvbdnsfvn vnvbnfvdnsfndsvnfndsv nndsvfndsnfvnds nvsnfvnds vnvdsnfvdnsfvn vnsvdfbndsvnfvdnsvf nvsnfv nsvdfn vnvndfvndsvf nvnsdvfndsvfnvs nvnsdvf nvnsvnsdvfnvs nvsdnfvnsvf nsvnvfnnsdvf </string>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <nil key="highlightedColor"/>
+                    <string key="userLabel">MessageLabel - ghdjfshsdhfbsdnbvdsnfn nvsdfnvbdnsfvn vnvbnfvdnsfndsvnfndsv nndsvfndsnfvnds nvsnfvnds vnvdsnfvdnsfvn vnsvdfbndsvnfvdnsvf nvsnfv nsvdfn vnvndfvndsvf nvnsdvfndsvfnvs nvnsdvf nvnsvnsdvfnvs nvsdnfvnsvf nsvnvfnnsdvf</string>
+                </label>
+                <button opaque="NO" tag="66" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="u3y-8M-Laf">
+                    <rect key="frame" x="9" y="207" width="157" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <color key="backgroundColor" red="0.17986505680000001" green="0.17986505680000001" blue="0.17986505680000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <state key="normal" title="Cancel">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlertPlaceHolder.png" id="Erc-da-Mj9">
+                    <rect key="frame" x="161" y="159" width="112" height="93"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="btnOk" destination="tfz-Sb-iG2" id="koU-mY-m4l"/>
+                <outlet property="lblBody" destination="SZd-58-jw8" id="cqR-Uo-u86"/>
+                <outlet property="lblTitle" destination="QVm-U6-uuf" id="Grn-z9-Spk"/>
+            </connections>
+        </view>
+    </objects>
+    <resources>
+        <image name="AlertPlaceHolder.png" width="76" height="76"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

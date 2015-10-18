@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileImageViewController">
+            <connections>
+                <outlet property="flagButton" destination="iZ4-pK-MNb" id="9Fa-3s-5Mu"/>
+                <outlet property="profileImageView" destination="wUU-5I-Frs" id="9c3-q3-LRZ"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wUU-5I-Frs">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cg4-F9-RNp">
+                    <rect key="frame" x="8" y="8" width="44" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="dPQ-97-BCh"/>
+                        <constraint firstAttribute="width" constant="44" id="eEk-gL-eJ0"/>
+                    </constraints>
+                    <state key="normal" image="CrossCircle">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="closeClicked:" destination="-1" eventType="touchUpInside" id="fF0-bK-Kqq"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iZ4-pK-MNb">
+                    <rect key="frame" x="268" y="8" width="44" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="Qnw-Bz-75P"/>
+                        <constraint firstAttribute="width" constant="44" id="lVm-N0-rtE"/>
+                    </constraints>
+                    <state key="normal" image="flag">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="flagClicked:" destination="-1" eventType="touchUpInside" id="DhT-BR-UIw"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="iZ4-pK-MNb" secondAttribute="trailing" constant="8" id="2Ty-1K-AqB"/>
+                <constraint firstItem="iZ4-pK-MNb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="N4t-PK-G5z">
+                    <variation key="heightClass=regular-widthClass=compact" constant="28"/>
+                </constraint>
+                <constraint firstItem="cg4-F9-RNp" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="VT9-ZQ-0Rf"/>
+                <constraint firstItem="cg4-F9-RNp" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="XuP-MS-qtj">
+                    <variation key="heightClass=regular-widthClass=compact" constant="28"/>
+                </constraint>
+                <constraint firstAttribute="bottom" secondItem="wUU-5I-Frs" secondAttribute="bottom" id="dSe-Th-yKi"/>
+                <constraint firstItem="wUU-5I-Frs" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="daU-gh-NKz"/>
+                <constraint firstItem="wUU-5I-Frs" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="eHd-gc-aOc"/>
+                <constraint firstAttribute="trailing" secondItem="wUU-5I-Frs" secondAttribute="trailing" id="oGc-Pc-0Bk"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="CrossCircle" width="24" height="24"/>
+        <image name="flag" width="25" height="25"/>
+    </resources>
+</document>

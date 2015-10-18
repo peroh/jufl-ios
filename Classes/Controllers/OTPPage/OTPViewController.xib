@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="ProximaNova-Light.otf">
+            <string>ProximaNova-Light</string>
+            <string>ProximaNova-Light</string>
+            <string>ProximaNova-Light</string>
+            <string>ProximaNova-Light</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OTPViewController">
+            <connections>
+                <outlet property="confirmButton" destination="6YH-wY-rj1" id="8oU-xt-DmS"/>
+                <outlet property="otpTextField" destination="4sr-EQ-Kmc" id="4rd-HJ-a4H"/>
+                <outlet property="resendButton" destination="anX-of-kmn" id="n3A-yg-VsN"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="peopleBlur" translatesAutoresizingMaskIntoConstraints="NO" id="ZuI-hS-vAM">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="ZuI-hS-vAM" secondAttribute="height" multiplier="160:107" id="SFx-na-sYs"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="SFx-na-sYs"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="SFx-na-sYs"/>
+                        </mask>
+                    </variation>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5bH-fj-xc3">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter the code sent to your Mobile No." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ooq-oH-gMJ">
+                            <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="2k3-gH-pDq"/>
+                                <constraint firstAttribute="width" constant="279" id="vRk-HP-7PE"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="2k3-gH-pDq"/>
+                                    <exclude reference="vRk-HP-7PE"/>
+                                </mask>
+                            </variation>
+                            <variation key="heightClass=regular-widthClass=compact">
+                                <mask key="constraints">
+                                    <include reference="2k3-gH-pDq"/>
+                                    <include reference="vRk-HP-7PE"/>
+                                </mask>
+                            </variation>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6YH-wY-rj1">
+                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                            <color key="backgroundColor" red="0.3803921569" green="0.3803921569" blue="0.3803921569" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="275" id="iuZ-Zj-9gf"/>
+                                <constraint firstAttribute="height" constant="45" id="jSS-RC-69R"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
+                            <state key="normal" title="Confirm">
+                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="iuZ-Zj-9gf"/>
+                                    <exclude reference="jSS-RC-69R"/>
+                                </mask>
+                            </variation>
+                            <variation key="heightClass=regular-widthClass=compact">
+                                <mask key="constraints">
+                                    <include reference="iuZ-Zj-9gf"/>
+                                    <include reference="jSS-RC-69R"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="confirmAction:" destination="-1" eventType="touchUpInside" id="ivV-aE-Ivt"/>
+                            </connections>
+                        </button>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Code" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4sr-EQ-Kmc">
+                            <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="5SU-1j-SFn"/>
+                                <constraint firstAttribute="width" constant="275" id="7eN-V1-naC"/>
+                            </constraints>
+                            <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
+                            <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="5SU-1j-SFn"/>
+                                    <exclude reference="7eN-V1-naC"/>
+                                </mask>
+                            </variation>
+                            <variation key="heightClass=regular-widthClass=compact">
+                                <mask key="constraints">
+                                    <include reference="5SU-1j-SFn"/>
+                                    <include reference="7eN-V1-naC"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <outlet property="delegate" destination="-1" id="xR9-C8-Ik2"/>
+                            </connections>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="anX-of-kmn">
+                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="131" id="SAi-C6-RhU"/>
+                                <constraint firstAttribute="height" constant="40" id="Wnf-YB-RmZ"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
+                            <state key="normal" title="Resend Code">
+                                <color key="titleColor" red="0.12941176469999999" green="0.80392156859999997" blue="0.71372549019999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="SAi-C6-RhU"/>
+                                    <exclude reference="Wnf-YB-RmZ"/>
+                                </mask>
+                            </variation>
+                            <variation key="heightClass=regular-widthClass=compact">
+                                <mask key="constraints">
+                                    <include reference="SAi-C6-RhU"/>
+                                    <include reference="Wnf-YB-RmZ"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="resendAction:" destination="-1" eventType="touchUpInside" id="xRX-in-FOs"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.98431372549999996" green="0.98431372549999996" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="6YH-wY-rj1" firstAttribute="top" secondItem="4sr-EQ-Kmc" secondAttribute="bottom" constant="10" id="1jg-Ns-H1X"/>
+                        <constraint firstItem="4sr-EQ-Kmc" firstAttribute="top" secondItem="Ooq-oH-gMJ" secondAttribute="bottom" constant="21" id="8i8-Bq-akS"/>
+                        <constraint firstItem="4sr-EQ-Kmc" firstAttribute="centerX" secondItem="Ooq-oH-gMJ" secondAttribute="centerX" id="JLd-Cb-Hom"/>
+                        <constraint firstAttribute="centerX" secondItem="Ooq-oH-gMJ" secondAttribute="centerX" constant="-0.5" id="NKx-Hc-cVD"/>
+                        <constraint firstItem="anX-of-kmn" firstAttribute="top" secondItem="6YH-wY-rj1" secondAttribute="bottom" constant="10" id="VGH-5d-7bz"/>
+                        <constraint firstItem="4sr-EQ-Kmc" firstAttribute="centerX" secondItem="6YH-wY-rj1" secondAttribute="centerX" id="WlV-hZ-8Tq"/>
+                        <constraint firstItem="Ooq-oH-gMJ" firstAttribute="top" secondItem="5bH-fj-xc3" secondAttribute="top" constant="23" id="bsG-7B-ljo"/>
+                        <constraint firstItem="6YH-wY-rj1" firstAttribute="centerX" secondItem="anX-of-kmn" secondAttribute="centerX" constant="1" id="rOn-fI-dOi"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="subviews">
+                            <exclude reference="Ooq-oH-gMJ"/>
+                            <exclude reference="6YH-wY-rj1"/>
+                            <exclude reference="4sr-EQ-Kmc"/>
+                            <exclude reference="anX-of-kmn"/>
+                        </mask>
+                        <mask key="constraints">
+                            <exclude reference="8i8-Bq-akS"/>
+                            <exclude reference="JLd-Cb-Hom"/>
+                            <exclude reference="WlV-hZ-8Tq"/>
+                            <exclude reference="NKx-Hc-cVD"/>
+                            <exclude reference="bsG-7B-ljo"/>
+                            <exclude reference="1jg-Ns-H1X"/>
+                            <exclude reference="rOn-fI-dOi"/>
+                            <exclude reference="VGH-5d-7bz"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="subviews">
+                            <include reference="Ooq-oH-gMJ"/>
+                            <include reference="6YH-wY-rj1"/>
+                            <include reference="4sr-EQ-Kmc"/>
+                            <include reference="anX-of-kmn"/>
+                        </mask>
+                        <mask key="constraints">
+                            <include reference="8i8-Bq-akS"/>
+                            <include reference="JLd-Cb-Hom"/>
+                            <include reference="WlV-hZ-8Tq"/>
+                            <include reference="NKx-Hc-cVD"/>
+                            <include reference="bsG-7B-ljo"/>
+                            <include reference="1jg-Ns-H1X"/>
+                            <include reference="rOn-fI-dOi"/>
+                            <include reference="VGH-5d-7bz"/>
+                        </mask>
+                    </variation>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ptH-3u-1cT">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="44" id="8Yu-mE-w1k"/>
+                        <constraint firstAttribute="height" constant="44" id="OPb-jg-MZg"/>
+                    </constraints>
+                    <state key="normal" image="BackButton">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="8Yu-mE-w1k"/>
+                            <exclude reference="OPb-jg-MZg"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="8Yu-mE-w1k"/>
+                            <include reference="OPb-jg-MZg"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="backClicked:" destination="-1" eventType="touchUpInside" id="O9J-gD-D4c"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.98431372549999996" green="0.98431372549999996" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="5bH-fj-xc3" secondAttribute="trailing" id="44n-pC-etc"/>
+                <constraint firstItem="5bH-fj-xc3" firstAttribute="centerX" secondItem="ZuI-hS-vAM" secondAttribute="centerX" id="Gtr-0f-uOH"/>
+                <constraint firstItem="5bH-fj-xc3" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="HzM-Vd-vOv"/>
+                <constraint firstAttribute="trailing" secondItem="ZuI-hS-vAM" secondAttribute="trailing" id="Jba-qV-5a1"/>
+                <constraint firstItem="ZuI-hS-vAM" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Rai-Aa-kHY"/>
+                <constraint firstItem="ptH-3u-1cT" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="ecC-7Q-aJp"/>
+                <constraint firstItem="ptH-3u-1cT" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="h0T-th-Com"/>
+                <constraint firstItem="ZuI-hS-vAM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="mGW-Qy-JsS"/>
+                <constraint firstAttribute="bottom" secondItem="5bH-fj-xc3" secondAttribute="bottom" id="ozX-ym-2gl"/>
+                <constraint firstItem="5bH-fj-xc3" firstAttribute="top" secondItem="ZuI-hS-vAM" secondAttribute="bottom" constant="-133" id="rKB-h6-ml1"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="ZuI-hS-vAM"/>
+                    <exclude reference="5bH-fj-xc3"/>
+                    <exclude reference="ptH-3u-1cT"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="ecC-7Q-aJp"/>
+                    <exclude reference="h0T-th-Com"/>
+                    <exclude reference="Jba-qV-5a1"/>
+                    <exclude reference="Rai-Aa-kHY"/>
+                    <exclude reference="mGW-Qy-JsS"/>
+                    <exclude reference="44n-pC-etc"/>
+                    <exclude reference="Gtr-0f-uOH"/>
+                    <exclude reference="HzM-Vd-vOv"/>
+                    <exclude reference="ozX-ym-2gl"/>
+                    <exclude reference="rKB-h6-ml1"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="ZuI-hS-vAM"/>
+                    <include reference="5bH-fj-xc3"/>
+                    <include reference="ptH-3u-1cT"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="ecC-7Q-aJp"/>
+                    <include reference="h0T-th-Com"/>
+                    <include reference="Jba-qV-5a1"/>
+                    <include reference="Rai-Aa-kHY"/>
+                    <include reference="mGW-Qy-JsS"/>
+                    <include reference="44n-pC-etc"/>
+                    <include reference="Gtr-0f-uOH"/>
+                    <include reference="HzM-Vd-vOv"/>
+                    <include reference="ozX-ym-2gl"/>
+                    <include reference="rKB-h6-ml1"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+    <resources>
+        <image name="BackButton" width="14" height="15"/>
+        <image name="peopleBlur" width="320" height="213"/>
+    </resources>
+</document>

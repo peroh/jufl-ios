@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="ProximaNova-Light.otf">
+            <string>ProximaNova-Light</string>
+            <string>ProximaNova-Light</string>
+            <string>ProximaNova-Light</string>
+        </mutableArray>
+        <mutableArray key="ProximaNova-Semibold.otf">
+            <string>ProximaNova-Semibold</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactAccessViewController">
+            <connections>
+                <outlet property="disclaimerTopConstraint" destination="BTP-eR-HkQ" id="VMM-Ej-W7Z"/>
+                <outlet property="letMeInTopConstraint" destination="RVS-Dz-ENb" id="aPj-TZ-uX2"/>
+                <outlet property="separatorTopConstraint" destination="URr-Wu-guV" id="LTy-zu-RIC"/>
+                <outlet property="titleLabelTopConstraint" destination="3lv-8d-IiV" id="Xgf-dI-tEO"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="contactAccessTopImage" translatesAutoresizingMaskIntoConstraints="NO" id="fic-CK-HwN">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="fic-CK-HwN" secondAttribute="height" multiplier="80:53" id="xf0-2j-P2p"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="xf0-2j-P2p"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="xf0-2j-P2p"/>
+                        </mask>
+                    </variation>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t47-u5-RdN">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="44" id="Cez-t0-OW1"/>
+                        <constraint firstAttribute="height" constant="44" id="MGp-GU-Mnw"/>
+                    </constraints>
+                    <state key="normal" image="BackButton">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Cez-t0-OW1"/>
+                            <exclude reference="MGp-GU-Mnw"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="Cez-t0-OW1"/>
+                            <include reference="MGp-GU-Mnw"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="backClicked:" destination="-1" eventType="touchUpInside" id="KR8-rL-fT4"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="One last step before starting" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jWx-my-gkH">
+                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="n5q-dA-X2v"/>
+                        <constraint firstAttribute="width" constant="136" id="pr0-Qu-SwN"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="20"/>
+                    <color key="textColor" red="0.25490196079999999" green="0.25098039220000001" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="n5q-dA-X2v"/>
+                            <exclude reference="pr0-Qu-SwN"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="n5q-dA-X2v"/>
+                            <include reference="pr0-Qu-SwN"/>
+                        </mask>
+                    </variation>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B9n-FG-dHx">
+                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="fEy-gD-KAb">
+                            <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                        </constraint>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="fEy-gD-KAb"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="fEy-gD-KAb"/>
+                        </mask>
+                    </variation>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iCL-kH-ZTA">
+                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="231" id="5Hs-08-3m0"/>
+                        <constraint firstAttribute="height" constant="81" id="Skb-WB-bK5"/>
+                    </constraints>
+                    <string key="text">The app will import your phone contacts so you can connect with your friends. We will treat your personal data responsibly and we will not pass it on to third parties.</string>
+                    <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="5Hs-08-3m0"/>
+                            <exclude reference="Skb-WB-bK5"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="5Hs-08-3m0"/>
+                            <include reference="Skb-WB-bK5"/>
+                        </mask>
+                    </variation>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="156-4A-1XD">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <color key="backgroundColor" red="0.12941176469999999" green="0.80392156859999997" blue="0.71372549019999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="275" id="OOb-g5-QCJ"/>
+                        <constraint firstAttribute="height" constant="45" id="PnC-hA-LDd"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
+                    <state key="normal" title="OK, let me in">
+                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="OOb-g5-QCJ"/>
+                            <exclude reference="PnC-hA-LDd"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="OOb-g5-QCJ"/>
+                            <include reference="PnC-hA-LDd"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="letMeInClicked:" destination="-1" eventType="touchUpInside" id="ln5-uC-gow"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ShO-Hw-ZRB">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="Bca-Ur-aWY"/>
+                        <constraint firstAttribute="width" constant="61" id="FMx-Rx-ccb"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
+                    <state key="normal" title="Skip">
+                        <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Bca-Ur-aWY"/>
+                            <exclude reference="FMx-Rx-ccb"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="Bca-Ur-aWY"/>
+                            <include reference="FMx-Rx-ccb"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="cancelClicked:" destination="-1" eventType="touchUpInside" id="eo8-Ll-OgR"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.98431372549999996" green="0.98431372549999996" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="fic-CK-HwN" firstAttribute="centerX" secondItem="jWx-my-gkH" secondAttribute="centerX" id="0Y6-hB-FF8"/>
+                <constraint firstItem="jWx-my-gkH" firstAttribute="top" secondItem="fic-CK-HwN" secondAttribute="bottom" constant="27" id="3lv-8d-IiV"/>
+                <constraint firstItem="B9n-FG-dHx" firstAttribute="centerX" secondItem="iCL-kH-ZTA" secondAttribute="centerX" constant="-0.5" id="BD1-Ey-1fH"/>
+                <constraint firstItem="iCL-kH-ZTA" firstAttribute="top" secondItem="B9n-FG-dHx" secondAttribute="bottom" constant="28" id="BTP-eR-HkQ"/>
+                <constraint firstItem="B9n-FG-dHx" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="C9n-rp-MYV"/>
+                <constraint firstItem="fic-CK-HwN" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="CaF-Gb-WbJ"/>
+                <constraint firstItem="ShO-Hw-ZRB" firstAttribute="top" secondItem="156-4A-1XD" secondAttribute="bottom" constant="15" id="Lzd-cG-MZr"/>
+                <constraint firstAttribute="trailing" secondItem="B9n-FG-dHx" secondAttribute="trailing" id="NFL-d7-ctc"/>
+                <constraint firstAttribute="trailing" secondItem="fic-CK-HwN" secondAttribute="trailing" id="O4p-d2-UAj"/>
+                <constraint firstItem="156-4A-1XD" firstAttribute="top" secondItem="iCL-kH-ZTA" secondAttribute="bottom" constant="26" id="RVS-Dz-ENb"/>
+                <constraint firstItem="B9n-FG-dHx" firstAttribute="top" secondItem="jWx-my-gkH" secondAttribute="bottom" constant="27" id="URr-Wu-guV"/>
+                <constraint firstItem="t47-u5-RdN" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="YHz-Mg-Z6o"/>
+                <constraint firstItem="t47-u5-RdN" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="fmS-PM-maM"/>
+                <constraint firstItem="ShO-Hw-ZRB" firstAttribute="centerX" secondItem="156-4A-1XD" secondAttribute="centerX" id="iH6-mF-OPp"/>
+                <constraint firstItem="iCL-kH-ZTA" firstAttribute="centerX" secondItem="156-4A-1XD" secondAttribute="centerX" id="jHn-Bz-1LZ"/>
+                <constraint firstItem="fic-CK-HwN" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="l5v-lA-YWY"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="fic-CK-HwN"/>
+                    <exclude reference="t47-u5-RdN"/>
+                    <exclude reference="jWx-my-gkH"/>
+                    <exclude reference="B9n-FG-dHx"/>
+                    <exclude reference="iCL-kH-ZTA"/>
+                    <exclude reference="156-4A-1XD"/>
+                    <exclude reference="ShO-Hw-ZRB"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="BD1-Ey-1fH"/>
+                    <exclude reference="C9n-rp-MYV"/>
+                    <exclude reference="NFL-d7-ctc"/>
+                    <exclude reference="URr-Wu-guV"/>
+                    <exclude reference="BTP-eR-HkQ"/>
+                    <exclude reference="jHn-Bz-1LZ"/>
+                    <exclude reference="3lv-8d-IiV"/>
+                    <exclude reference="RVS-Dz-ENb"/>
+                    <exclude reference="Lzd-cG-MZr"/>
+                    <exclude reference="iH6-mF-OPp"/>
+                    <exclude reference="YHz-Mg-Z6o"/>
+                    <exclude reference="fmS-PM-maM"/>
+                    <exclude reference="0Y6-hB-FF8"/>
+                    <exclude reference="CaF-Gb-WbJ"/>
+                    <exclude reference="O4p-d2-UAj"/>
+                    <exclude reference="l5v-lA-YWY"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="fic-CK-HwN"/>
+                    <include reference="t47-u5-RdN"/>
+                    <include reference="jWx-my-gkH"/>
+                    <include reference="B9n-FG-dHx"/>
+                    <include reference="iCL-kH-ZTA"/>
+                    <include reference="156-4A-1XD"/>
+                    <include reference="ShO-Hw-ZRB"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="BD1-Ey-1fH"/>
+                    <include reference="C9n-rp-MYV"/>
+                    <include reference="NFL-d7-ctc"/>
+                    <include reference="URr-Wu-guV"/>
+                    <include reference="BTP-eR-HkQ"/>
+                    <include reference="jHn-Bz-1LZ"/>
+                    <include reference="3lv-8d-IiV"/>
+                    <include reference="RVS-Dz-ENb"/>
+                    <include reference="Lzd-cG-MZr"/>
+                    <include reference="iH6-mF-OPp"/>
+                    <include reference="YHz-Mg-Z6o"/>
+                    <include reference="fmS-PM-maM"/>
+                    <include reference="0Y6-hB-FF8"/>
+                    <include reference="CaF-Gb-WbJ"/>
+                    <include reference="O4p-d2-UAj"/>
+                    <include reference="l5v-lA-YWY"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+    <resources>
+        <image name="BackButton" width="14" height="15"/>
+        <image name="contactAccessTopImage" width="320" height="212"/>
+    </resources>
+</document>
