@@ -35,6 +35,15 @@
 #define KTermsPolicy @"term-policy"
 #define KPrivacyPolicy @"privacy-policy"
 
+//Chat services
+#define kGetChatService @"get-group-chat"
+#define kGetLatestChatService @"latest_chat"
+#define kPostGroupChatService @"group-chat"
+#define kPostPrivateChatService @"private-chat"
+#define kChatListService @"event-member-list"
+
+
+
 //Web service keys
 #define kCountryCode @"country_code"
 #define kDeviceToken @"device_token"
@@ -69,12 +78,35 @@
 #define kNotificationInvite @"event_invite"
 #define kNotificationEdit @"event_edit"
 #define kNotificationCancel @"event_cancel"
+
+//dhirendra cahnge
+#define kParticipantList @"participant list"
+#define kBadgeCount @"badgeCount"
+#define kChatImagePath @"path"
+#define kDateTime @"date_time"
+#define kReceiptId @"receipt_id" //to user id
+#define kChatMessage @"message"
+#define kChatInfo @"chatInfo"
+#define kUserInfo @"userInfo"
+
+#define kNotificationInviteeNotiication @"event_status_update"
+#define kNotificationActivityScheduled @"event_reminder_status"
+/////////
+
 #define kGoingCount @"going_count"
+
+#define kGoingBagdeCount @"badge_going_count"
+#define kCantGoingBadgeCount @"badgecantgo_count"
+
+#define kTabGoing  @"going"
+#define kShowing @"showing"
+
 #define kReason @"reason"
 #define kAlert @"alert"
 
 #define kAps @"aps"
 #define kPushTag @"push_tag"
+
 
 
 //.........................................Four Square/..................................

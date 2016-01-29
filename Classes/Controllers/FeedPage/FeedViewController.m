@@ -144,10 +144,8 @@ static NSString *cellIdentifier = @"FeedTableViewCell";
 
 -(NSArray *)getAcceptedEvents:(NSArray *)originalArray {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(eventRespose == %@) AND (isDeleted == %@)", [NSNumber numberWithInteger:EventResponseAccepted],[NSNumber numberWithBool:NO]];
-    
-//    NSPredicate *cancelPredicate = [NSPredicate predicateWithFormat:@"isDeleted == %@",[NSNumber numberWithBool:NO]];
+    // NSPredicate *cancelPredicate = [NSPredicate predicateWithFormat:@"isDeleted == %@",[NSNumber numberWithBool:NO]];
     NSArray *acceptedArray = [originalArray filteredArrayUsingPredicate:predicate];
-    
     return acceptedArray;
 }
 
@@ -161,11 +159,14 @@ static NSString *cellIdentifier = @"FeedTableViewCell";
     else {
         goingViewMode = GoingViewModeInvitee;
     }
+    
     GoingViewController *goingViewController = [[GoingViewController alloc]initWithEvent:event withMode:goingViewMode];
+    
+    goingViewController.openTabStr = kTabGoing;
+    
     goingViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:goingViewController animated:YES];
 }
-
 
 
 #pragma mark - IBActions

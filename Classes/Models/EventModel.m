@@ -109,6 +109,11 @@
         self.creator = [[UserModel alloc]initWithDictionary:[self objectOrNilForKey:kUser fromDictionary:dict]];
         self.goingCount = stringValue([self objectOrNilForKey:kGoingCount fromDictionary:dict]);
         self.cancelReason = stringValue([self objectOrNilForKey:kReason fromDictionary:dict]);
+        
+        self.goingBadgeCount = [[self objectOrNilForKey:kGoingBagdeCount fromDictionary:dict] intValue];
+        self.cantGoingBadgeCount = [[self objectOrNilForKey:kCantGoingBadgeCount fromDictionary:dict] intValue];
+        
+        
     }
     return self;
 }

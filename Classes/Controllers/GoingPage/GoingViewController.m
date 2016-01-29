@@ -96,6 +96,7 @@ static NSString *cellIdentifier = @"ContactsTableViewCell";
     else {
         self.showToMoreButton.backgroundColor = Rgb2UIColor(33, 205, 182);
     }
+    
     [self.view layoutIfNeeded];
 }
 
@@ -130,12 +131,30 @@ static NSString *cellIdentifier = @"ContactsTableViewCell";
         [Utils createMainQueue:^{
             
             if (success) {
+                 //DLog(@"PUser = %@",users);
                 self.allInvitedArray = [users mutableCopy];
                 
                 self.tableViewMode = GoingTableViewModeGoing;
                 self.tableDataArray = [[self filterGoingUsers:YES]mutableCopy];
-                [self goingClicked:nil];
+                
+                if (self.viewMode==GoingViewModeCreator) {
+                   DLog(@"self.openTabStr = %@",self.openTabStr);
+                    if ([self.openTabStr isEqualToString:kTabGoing]) {
+                        [self goingClicked:nil];
+                    }
+                    else{
+                        [self invitedClicked:nil];
+                    }
+                
+                }
+                else{
+                 [self goingClicked:nil];
+                }
+                
                 [Utils stopActivityIndicatorInView];
+                
+                //DLog(@"self.table invited arary = %@",self.allInvitedArray);
+                 //DLog(@"self.table DataArray = %@",self.tableDataArray);
                 if (self.tableDataArray.count>0) {
                     [self.goingTableView reloadData];
                     [self.noDataLabel setHidden:YES];
@@ -249,7 +268,8 @@ static NSString *cellIdentifier = @"ContactsTableViewCell";
 }
 
 
--(void)hideView {
+-(void)hideView
+{
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         self.blurView.alpha=0.0f;
         self.blurView.hidden=YES;
@@ -258,6 +278,7 @@ static NSString *cellIdentifier = @"ContactsTableViewCell";
          
      }];
 }
+
 
 #pragma mark - IBAction
 - (IBAction)backClicked:(id)sender {

@@ -34,8 +34,15 @@
     
 #ifdef RELEASE
     
-   // baseURL = @"http://54.66.156.48/jufl/public/api"; // Production URL
-    baseURL = @"https://admin.jufl.io/api"; // Production URL
+    baseURL = @"http://54.66.156.48/jufl/public/api"; // Production URL For development
+    
+    /************/
+    //baseURL = @"https://54.153.193.95/api";//Main Live on Appstore
+    /************/
+    
+   
+    
+   // baseURL = @"https://admin.jufl.io/api"; // Production URL//dhirendra cahnge
 
     
 #endif

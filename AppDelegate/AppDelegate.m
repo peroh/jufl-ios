@@ -143,8 +143,9 @@ AppDelegate *appDelegate = nil; //external variable
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
 {
-    [[SharedClass sharedInstance] setIsRegistered:NO];
     DLog(@"Failed to get token, error: %@", error);
+    [[SharedClass sharedInstance] setIsRegistered:NO];
+    
 }
 
 - (void)pushNotificationReceivedWithDictionary : (NSDictionary *)userInfo

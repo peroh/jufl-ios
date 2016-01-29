@@ -51,7 +51,7 @@ static NSString *cellIdentifier = @"NotificationPageTableViewCell";
 #pragma Mark-My functions
 -(void)initializeView
 {
-    cellLabelTextArray=[[NSArray alloc]initWithObjects:@"New activity", @"Details changed", @"Activity cancelled", nil];
+    cellLabelTextArray=[[NSArray alloc]initWithObjects:@"New activity", @"Details changed", @"Activity cancelled",@"Invitee Notifications", @"Activity reminder", nil];
     [self.tableView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil] forCellReuseIdentifier:cellIdentifier];
     self.tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
 }
@@ -93,7 +93,32 @@ static NSString *cellIdentifier = @"NotificationPageTableViewCell";
                 }];
             }];
             
+        }else if (sender.tag==3)
+        {
+            [Utils createBackGroundQueue:^{
+                NSDictionary *params = @{kNotificationInviteeNotiication:@"1"};
+                [EventModel onOffNotification:params completion:^(BOOL success, NSError *error) {
+                    if(success)
+                    {
+                        DLog(@"%i",success);
+                    }
+                }];
+            }];
+            
+        }else if (sender.tag==4)
+        {
+            [Utils createBackGroundQueue:^{
+                NSDictionary *params = @{kNotificationActivityScheduled:@"1"};
+                [EventModel onOffNotification:params completion:^(BOOL success, NSError *error) {
+                    if(success)
+                    {
+                        DLog(@"%i",success);
+                    }
+                }];
+            }];
+            
         }
+        
     }else
     {
         if (sender.tag==0) {
@@ -130,6 +155,28 @@ static NSString *cellIdentifier = @"NotificationPageTableViewCell";
                     }
                 }];
             }];
+        }else if (sender.tag==3)
+        {
+            [Utils createBackGroundQueue:^{
+                NSDictionary *params = @{kNotificationInviteeNotiication:@"0"};
+                [EventModel onOffNotification:params completion:^(BOOL success, NSError *error) {
+                    if(success)
+                    {
+                        DLog(@"%i",success);
+                    }
+                }];
+            }];
+        }else if (sender.tag==4)
+        {
+            [Utils createBackGroundQueue:^{
+                NSDictionary *params = @{kNotificationActivityScheduled:@"0"};
+                [EventModel onOffNotification:params completion:^(BOOL success, NSError *error) {
+                    if(success)
+                    {
+                        DLog(@"%i",success);
+                    }
+                }];
+            }];
         }
     }
 }
@@ -159,6 +206,20 @@ static NSString *cellIdentifier = @"NotificationPageTableViewCell";
     }
     if (indexPath.row==2) {
         if ([[notificationDic valueForKey:kNotificationCancel] isEqual:@"1"]) {
+            [cell.toggleSwitch setOn:YES animated:NO];
+        }else{
+            [cell.toggleSwitch setOn:NO animated:NO];
+        }
+    }
+    if (indexPath.row==3) {
+        if ([[notificationDic valueForKey:kNotificationInviteeNotiication] isEqual:@"1"]) {
+            [cell.toggleSwitch setOn:YES animated:NO];
+        }else{
+            [cell.toggleSwitch setOn:NO animated:NO];
+        }
+    }
+    if (indexPath.row==4) {
+        if ([[notificationDic valueForKey:kNotificationActivityScheduled] isEqual:@"1"]) {
             [cell.toggleSwitch setOn:YES animated:NO];
         }else{
             [cell.toggleSwitch setOn:NO animated:NO];

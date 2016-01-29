@@ -23,7 +23,7 @@
         sharedInstance = [[self alloc] init];
         if(sharedInstance)
         {
-                       [(SharedClass *)sharedInstance setDeviceId:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
+            [(SharedClass *)sharedInstance setDeviceId:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
             ((SharedClass *)sharedInstance).currentEvent = [[EventModel alloc]init];
         }
     });

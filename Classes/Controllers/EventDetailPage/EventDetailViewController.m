@@ -14,7 +14,7 @@
 #import "TabBarViewController.h"
 #import "AppDelegate.h"
 #import "NRValidation.h"
-
+#import "ChatViewController.h"
 #define MapPinImageName @"annotation"
 
 @interface EventDetailViewController ()<MKMapViewDelegate,UIActionSheetDelegate>
@@ -41,6 +41,18 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *timeButtonTopSpace;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *goingButtonTopSpace;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tapToGoTopSpace;
+
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *infoViewHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *labelXConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *mapButton;
+@property (weak, nonatomic) IBOutlet UIButton *chatButton;
+@property (weak, nonatomic) IBOutlet UIButton *infoButton;
+
+@property (weak, nonatomic) IBOutlet UILabel *badgeCountLbl;
+- (IBAction)mapFeedButtonClicked:(UIButton *)sender;
+- (IBAction)infoFeedButtonClicked:(UIButton *)sender;
+
 @end
 
 @implementation EventDetailViewController
@@ -95,26 +107,41 @@
 }
 #pragma mark - My Function
 -(void)initializeView {
+    self.badgeCountLbl.hidden = YES;
+    
+    
+    
+    self.badgeCountLbl.layer.cornerRadius = 12.5;
+    self.badgeCountLbl.layer.borderWidth = 0.0;
+    
+    self.eventMapView.hidden = NO;
+    self.additionalInfoLabel.hidden = YES;
+    [self.mapButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
+    [self.infoButton setTitleColor:Rgb2UIColor(170, 170, 170) forState:UIControlStateNormal];
+    self.labelXConstraint.constant = 0;
+    [self.view layoutIfNeeded];
+    
     if ([NRValidation isiPhone6]) {
         self.contentViewHeight.constant=597;
         self.mapViewHeight.constant=615/3;
+        self.infoViewHeight.constant=615/3;
         self.tapToGoTopSpace.constant=50;
         self.timeButtonTopSpace.constant=self.goingButtonTopSpace.constant=58;
         [self.view layoutIfNeeded];
     }else if([NRValidation isiPhone6Plus]){
         self.contentViewHeight.constant=666;
         self.mapViewHeight.constant=715/3;
+        self.infoViewHeight.constant=715/3;
         self.tapToGoTopSpace.constant=60;
         self.timeButtonTopSpace.constant=self.goingButtonTopSpace.constant=68;
         [self.view layoutIfNeeded];
     }
+  
     AppSharedClass.notificationCount = nil;
     TabBarViewController *tabBarController = (TabBarViewController *)appDelegate.window.rootViewController;
     [[tabBarController.tabBar.items objectAtIndex:4] setBadgeValue:nil];
     
-//    self.cantGoButton.selected=NO;
     self.cantGoButton.layer.cornerRadius = 5.0;
-//    self.cantGoButton.layer.borderColor = Rgb2UIColor(248, 80, 77).CGColor;
     self.cantGoButton.layer.borderWidth = 1;
     
     
@@ -133,13 +160,33 @@
     }
     self.eventResponseButton.enabled = !self.event.isDeleted;
     if (self.viewEventMode == CurrentPastFeedTableViewModePast) {
+        self.chatButton.enabled = NO;
         self.eventResponseButton.enabled = NO;
         self.cantGoButton.enabled = NO;
     }
 }
 
 - (void)displayEventData :(EventModel *)event {
-    [self hideAdditionalInfo];
+    
+    if ([self.additionalInfoLabel.text length]>0)
+    {
+        self.eventMapView.hidden = YES;
+        self.additionalInfoLabel.hidden = NO;
+        [self.infoButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
+        [self.mapButton setTitleColor:Rgb2UIColor(170, 170, 170) forState:UIControlStateNormal];
+        self.labelXConstraint.constant = (self.mapButton.size.width + 10);
+        [self.view layoutIfNeeded];
+    }
+    else
+    {
+        self.eventMapView.hidden = NO;
+        self.additionalInfoLabel.hidden = YES;
+        [self.mapButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
+        [self.infoButton setTitleColor:Rgb2UIColor(170, 170, 170) forState:UIControlStateNormal];
+        self.labelXConstraint.constant = 0;
+        [self.view layoutIfNeeded];
+    }
+    
     self.eventNameLabel.text = event.name;
     self.eventAddressLabel.text = [NSString stringWithFormat:@"%@\n%@", event.location.name, event.location.address];
     [self addAnnotationOnMap:event.location.coordinate title:event.name];
@@ -156,7 +203,10 @@
     
     self.creatorName.text = [NSString stringWithFormat:@"%@ %@",event.creator.firstName, event.creator.lastName];
     
-    if (self.viewMode == EventDetailModeMyEvent) {
+    if (self.viewMode == EventDetailModeMyEvent)
+    {
+        self.chatButton.enabled = YES;
+        
         [self.eventResponseButton setImage:[UIImage imageNamed:@"editButton"] forState:UIControlStateNormal];
         [self.eventResponseButton setImage:[UIImage imageNamed:@"editButton"] forState:UIControlStateSelected];
         self.joinLabel.text = @"Edit";
@@ -167,35 +217,73 @@
     }
     else {
         if (self.event.eventRespose == EventResponseAccepted) {
+            self.chatButton.enabled = YES;
+            
             self.joinLabel.text = @"Going";
             self.eventResponseButton.selected = YES;
             self.cantGoButton.enabled = YES;
             self.cantGoButton.selected = NO;
-            self.cantGoButton.layer.borderColor = Rgb2UIColor(200, 200, 200).CGColor;
-            [self.cantGoButton setTitleColor:Rgb2UIColor(200, 200, 200) forState:UIControlStateNormal];
+            
+            [self.cantGoButton setBackgroundColor:[UIColor clearColor]];
+            self.cantGoButton.layer.borderColor = Rgb2UIColor(248, 80, 77).CGColor;
+            [self.cantGoButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
+            
+            //self.cantGoButton.layer.borderColor = Rgb2UIColor(200, 200, 200).CGColor;
+            //[self.cantGoButton setTitleColor:Rgb2UIColor(200, 200, 200) forState:UIControlStateNormal];
         }
         else if (self.event.eventRespose == EventResponseRejected) {
+            self.chatButton.enabled = NO;
+            
             self.joinLabel.text = @"Tap to Go";
             self.eventResponseButton.selected = NO;
             self.cantGoButton.selected = YES;
+            
+            [self.cantGoButton setBackgroundColor:Rgb2UIColor(248, 80, 77)];
             self.cantGoButton.layer.borderColor = Rgb2UIColor(248, 80, 77).CGColor;
-            [self.cantGoButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
-           // self.cantGoButton.enabled = NO;
+            [self.cantGoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            //[self.cantGoButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
         }
         else if (self.event.eventRespose == EventResponseNoResponse) {
+            self.chatButton.enabled = NO;
+            
             self.joinLabel.text = @"Tap to Go";
             [self.eventResponseButton setSelected:NO];
             self.cantGoButton.enabled = YES;
             self.cantGoButton.selected = NO;
-            self.cantGoButton.layer.borderColor = Rgb2UIColor(200, 200, 200).CGColor;
-            [self.cantGoButton setTitleColor:Rgb2UIColor(200, 200, 200) forState:UIControlStateNormal];
             
+            [self.cantGoButton setBackgroundColor:[UIColor clearColor]];
+            self.cantGoButton.layer.borderColor = Rgb2UIColor(248, 80, 77).CGColor;
+            [self.cantGoButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
+            
+            //self.cantGoButton.layer.borderColor = Rgb2UIColor(200, 200, 200).CGColor;
+            //[self.cantGoButton setTitleColor:Rgb2UIColor(200, 200, 200) forState:UIControlStateNormal];
         }
+        
         self.cantGoButton.hidden = NO;
         [self.eventResponseButton setImage:[UIImage imageNamed:@"join"] forState:UIControlStateNormal];
         [self.eventResponseButton setImage:[UIImage imageNamed:@"joinSelected"] forState:UIControlStateSelected];
     }
     [self setCountdownTime:event];
+    
+    //show badge count
+    /********************/
+    int totalBadgeCount = event.goingBadgeCount + event.cantGoingBadgeCount;
+    if (self.viewMode == EventDetailModeMyEvent)
+    {
+        if (totalBadgeCount>0) {
+            self.badgeCountLbl.hidden = NO;
+        }
+        else{
+            self.badgeCountLbl.hidden = YES;
+        }
+    }
+    else{
+        self.badgeCountLbl.hidden = YES;
+    }
+    
+    self.badgeCountLbl.text = [NSString stringWithFormat:@"%i",totalBadgeCount];
+    /********************/
+    
     self.goingLabel.text = [NSString stringWithFormat:@"%@ going",event.goingCount];
     if (event.isDeleted) {
         self.additionalInfoLabel.text = event.cancelReason;
@@ -209,9 +297,12 @@
     self.additionalInfoLabel.font = FONT_ProximaNova_Light_WITH_SIZE(13.0);
     
     if (self.viewEventMode == CurrentPastFeedTableViewModePast) {
+        self.chatButton.enabled = NO;
         self.eventResponseButton.enabled = NO;
         self.cantGoButton.enabled = NO;
     }
+    
+
 }
 - (void)setCountdownTime :(EventModel *)event {
     if (!event.isDeleted) {
@@ -256,15 +347,6 @@
         }
     }
     [self.eventMapView showAnnotations:@[annotation] animated:YES];
-}
-- (void)showAdditionalInfo {
-    self.additionalInfoView.alpha = 1;
-    self.additionalInfoView.hidden = NO;
-}
-
--(void)hideAdditionalInfo {
-    self.additionalInfoView.alpha = 0;
-    self.additionalInfoView.hidden = YES;
 }
 
 -(void)googleMap
@@ -359,7 +441,8 @@
         [Utils startActivityIndicatorWithMessage:kPleaseWait];
         EventResponse eventResponse;
         if (self.event.eventRespose == EventResponseAccepted) {
-            eventResponse = EventResponseNoResponse;
+           //dhirendra cahnge
+            eventResponse = EventResponseNoResponse;//EventResponseNoResponse
         }
         else {
             eventResponse = EventResponseAccepted;
@@ -388,18 +471,43 @@
     else {
         goingViewMode = GoingViewModeInvitee;
     }
+    
+    self.badgeCountLbl.text = [NSString stringWithFormat:@"%i",0];
+    self.badgeCountLbl.hidden = YES;
+    
     if (self.viewEventMode) {
         GoingViewController *goingViewController=[[GoingViewController alloc]initWithEventMode:self.event withMode:goingViewMode withPastCurrentMode:self.viewEventMode];
+        
+        if (self.event.goingBadgeCount>0) {
+            goingViewController.openTabStr = kTabGoing;
+        }else if (self.event.cantGoingBadgeCount>0) {
+            goingViewController.openTabStr = kShowing;
+        }
+        else{
+            goingViewController.openTabStr = kTabGoing;
+        }
+        
         goingViewController.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:goingViewController animated:YES];
-
+        
     }else
     {
-    GoingViewController *goingViewController = [[GoingViewController alloc]initWithEvent:self.event withMode:goingViewMode];
-    goingViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:goingViewController animated:YES];
+        GoingViewController *goingViewController = [[GoingViewController alloc]initWithEvent:self.event withMode:goingViewMode];
+        goingViewController.hidesBottomBarWhenPushed = YES;
+        
+        if (self.event.goingBadgeCount>0) {
+            goingViewController.openTabStr = kTabGoing;
+        }else if (self.event.cantGoingBadgeCount>0) {
+            goingViewController.openTabStr = kShowing;
+        }
+        else{
+            goingViewController.openTabStr = kTabGoing;
+        }
+        
+        [self.navigationController pushViewController:goingViewController animated:YES];
     }
 }
+
 - (IBAction)navigationClicked:(id)sender {
     [[Mixpanel sharedInstance] track:@"NavigationUsed"];
     if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"comgooglemaps://"]]) {
@@ -415,11 +523,8 @@
     }
 }
 
-- (IBAction)additionalInfoClicked:(id)sender {
-    [self showAdditionalInfo];
-}
+
 - (IBAction)timeClicked:(id)sender {
-//    sUIButton *button = (UIButton *)sender;
     self.timeButton.selected = !self.timeButton.selected;
     if (self.timeButton.selected) {
         [self setEventTime:self.event];
@@ -428,9 +533,44 @@
         [self setCountdownTime:self.event];
     }
 }
-- (IBAction)closeClicked:(id)sender {
-    [self hideAdditionalInfo];
+
+
+#pragma mark- new method
+//dhirendra cahnge
+- (IBAction)mapFeedButtonClicked:(UIButton *)sender {
+    self.eventMapView.hidden = NO;
+    self.additionalInfoLabel.hidden = YES;
+    [self.mapButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
+    [self.infoButton setTitleColor:Rgb2UIColor(170, 170, 170) forState:UIControlStateNormal];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.labelXConstraint.constant = 0;
+        [self.view layoutIfNeeded];
+    }];
+    
+
 }
+
+- (IBAction)infoFeedButtonClicked:(UIButton *)sender {
+    self.eventMapView.hidden = YES;
+    self.additionalInfoLabel.hidden = NO;
+    [self.infoButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
+    [self.mapButton setTitleColor:Rgb2UIColor(170, 170, 170) forState:UIControlStateNormal];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.labelXConstraint.constant = (self.mapButton.size.width + 10);
+        [self.view layoutIfNeeded];
+    }];
+}
+- (IBAction)chatBtnClicked:(id)sender {
+    //[Utils showOKAlertWithTitle:@"" message:@"Under development."];
+    ChatViewController *chatViewController = [[ChatViewController alloc] initWithChat:self.event withViewMode:ChatModeGroup];
+    chatViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:chatViewController animated:YES];
+    
+}
+
+/////
+
+
 #pragma mark - Map View delegate
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
