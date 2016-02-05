@@ -51,7 +51,7 @@ static NSString *cellIdentifier = @"NotificationPageTableViewCell";
 #pragma Mark-My functions
 -(void)initializeView
 {
-    cellLabelTextArray=[[NSArray alloc]initWithObjects:@"New activity", @"Details changed", @"Activity cancelled",@"Invitee Notifications", @"Activity reminder", nil];
+    cellLabelTextArray=[[NSArray alloc]initWithObjects:@"New activity", @"Details changed", @"Activity cancelled",@"Invitee Notifications", @"Activity reminder",@"Chat", nil];
     [self.tableView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil] forCellReuseIdentifier:cellIdentifier];
     self.tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
 }
@@ -117,7 +117,20 @@ static NSString *cellIdentifier = @"NotificationPageTableViewCell";
                 }];
             }];
             
+        }else if (sender.tag==5)
+        {
+            [Utils createBackGroundQueue:^{
+                NSDictionary *params = @{kNotificationChat:@"1"};
+                [EventModel onOffNotification:params completion:^(BOOL success, NSError *error) {
+                    if(success)
+                    {
+                        DLog(@"%i",success);
+                    }
+                }];
+            }];
+            
         }
+        
         
     }else
     {
@@ -177,6 +190,17 @@ static NSString *cellIdentifier = @"NotificationPageTableViewCell";
                     }
                 }];
             }];
+        }else if (sender.tag==5)
+        {
+            [Utils createBackGroundQueue:^{
+                NSDictionary *params = @{kNotificationChat:@"0"};
+                [EventModel onOffNotification:params completion:^(BOOL success, NSError *error) {
+                    if(success)
+                    {
+                        DLog(@"%i",success);
+                    }
+                }];
+            }];
         }
     }
 }
@@ -220,6 +244,13 @@ static NSString *cellIdentifier = @"NotificationPageTableViewCell";
     }
     if (indexPath.row==4) {
         if ([[notificationDic valueForKey:kNotificationActivityScheduled] isEqual:@"1"]) {
+            [cell.toggleSwitch setOn:YES animated:NO];
+        }else{
+            [cell.toggleSwitch setOn:NO animated:NO];
+        }
+    }
+    if (indexPath.row==5) {
+        if ([[notificationDic valueForKey:kNotificationChat] isEqual:@"1"]) {
             [cell.toggleSwitch setOn:YES animated:NO];
         }else{
             [cell.toggleSwitch setOn:NO animated:NO];

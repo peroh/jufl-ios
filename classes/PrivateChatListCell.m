@@ -20,6 +20,9 @@
     // Configure the view for the selected state
 }
 - (void)setPrivateChatListCellData :(PrivateChatListModel *)chatList {
+    self.unreadMegCountLbl.layer.cornerRadius = 12.5;
+    self.unreadMegCountLbl.layer.borderWidth = 0.0;
+
     self.userImgView.layer.cornerRadius = 22.5;
     self.userImgView.clipsToBounds = YES;
         if([chatList.image hasSuffix:@"jpg"]){
@@ -36,6 +39,15 @@
     self.userImgView.image = [UIImage imageNamed:@"contactPlaceholder"];
     }
     self.userNameLbl.text = [NSString stringWithFormat:@"%@ %@",chatList.fisrtName,chatList.lastName];
+    
+    self.unreadMegCountLbl.text = [NSString stringWithFormat:@"%@",chatList.unreadMsgCount];
+    if ([self.unreadMegCountLbl.text isEqualToString:@"0"]) {
+        self.unreadMegCountLbl.hidden = YES;
+    }
+    else{
+        self.unreadMegCountLbl.hidden=NO;
+    }
+    
 }
 
 @end

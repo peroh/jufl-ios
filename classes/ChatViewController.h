@@ -14,6 +14,8 @@
    HPGrowingTextView *textView;
 }
 @property(nonatomic, strong) UIView *containerView;
+@property (assign) int groupUnreadMsgs;
+@property (assign) int privateUnreadMsgs;
 -(void)resignTextView;
 
 - (instancetype)initWithChat:(EventModel *)event withViewMode:(ChatViewMode)viewMode;

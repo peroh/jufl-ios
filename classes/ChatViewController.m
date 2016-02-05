@@ -16,6 +16,7 @@
 @interface ChatViewController ()
 @property (nonatomic, strong) EventModel *currEvent;
 @property (nonatomic, assign) ChatViewMode chatViewMode;
+@property (nonatomic, assign) ChatGroupMuteNotiMode chatGroupMuteNotiMode;
 @property (weak, nonatomic) IBOutlet UITableView *privateTableView;
 @property (weak, nonatomic) IBOutlet UILabel *chatTypeTitleLbl;
 
@@ -27,9 +28,13 @@
 @property (nonatomic, strong) ChatModel *chatModel;
 @property (nonatomic, strong) PrivateChatListModel *chooseMemberToChat;
 
-@property (nonatomic, strong) NSNumber *groupNextPage;
+@property (weak, nonatomic) IBOutlet UIButton *btnMuteGroupChatNoti;
+@property (assign) int groupNextPage;
+@property (nonatomic, strong) NSString *lastMsgId;
+@property (nonatomic, strong) NSString *lastestMsgId;
 @property (nonatomic, strong) NSMutableArray *chatTableArray;
 @property (nonatomic, strong) NSMutableArray *privateChatListTableArray;
+@property (weak, nonatomic) IBOutlet UILabel *noDataLabel;
 
 
 @end
@@ -37,9 +42,12 @@ static NSString *chatCellIdentifier = @"ChatTableViewCell";
 static NSString *privCellIdentifier = @"PrivateChatListCell";
 @implementation ChatViewController
 {
-    BOOL _wasKeyboardManagerEnabled;
-    BOOL isSigleChatOn;
-
+    BOOL _wasKeyboardManagerEnabled;//desable IQ keyboard manager
+    BOOL isSigleChatOn;//to check chat private list
+    BOOL _isTableFirstTimeLoad;//to refresh table on tab change
+    float keboardHieght;//to check keyboard height
+    NSTimer *timer1;//fo refesh group chat
+    NSTimer *timer2;//fo refesh private chat
 }
 
 #pragma mark - View life cycle
@@ -69,9 +77,6 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     [super viewDidLoad];
 
     // Do any additional setup after loading the view from its nib.
-    
-
-   
     [self performSelector:@selector(addChatFieldView) withObject:nil afterDelay:0.2];
     [self initializeView];
 }
@@ -80,21 +85,45 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     [super viewDidAppear:animated];
     _wasKeyboardManagerEnabled = [[IQKeyboardManager sharedManager] isEnabled];
     [[IQKeyboardManager sharedManager] setEnable:NO];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
-    
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if([timer1 isValid])
+    {
+        [timer1 invalidate];
+        timer1=nil;
+    }
+    if([timer2 isValid])
+    {
+        [timer2 invalidate];
+        timer2=nil;
+    }
     [[IQKeyboardManager sharedManager] setEnable:_wasKeyboardManagerEnabled];
 }
-
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if([timer1 isValid])
+    {
+        [timer1 invalidate];
+        timer1=nil;
+    }
+    if([timer2 isValid])
+    {
+        [timer2 invalidate];
+        timer2=nil;
+    }
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -112,6 +141,13 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
 
 #pragma mark - My Functions
 - (void)initializeView {
+    //intialize unread msg count
+    self.groupUnreadMsgs = 0;
+    self.privateUnreadMsgs = 0;
+    
+    self.chatGroupMuteNotiMode = NotiModeUnmute;
+    self.btnMuteGroupChatNoti.hidden = NO;
+    keboardHieght = 0.0;
      self.chatTableArray = [[NSMutableArray alloc]init];
     [self.groupButton.titleLabel setTextColor:Rgb2UIColor(248, 80, 77)];
     [self.privateButton.titleLabel setTextColor:Rgb2UIColor(170, 170, 170)];
@@ -122,6 +158,15 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     self.privateTableView.hidden = YES;
 
     [self updateChatTypeTitle:@"Chatting with everyone in" secondStr:self.currEvent.name];
+    
+    self.chatTableView.estimatedRowHeight = 72.0; // for example. Set your average height
+    self.chatTableView.rowHeight = UITableViewAutomaticDimension;
+    
+    //deafult choose message id
+    _isTableFirstTimeLoad = YES;
+    self.groupNextPage = 0;
+    self.lastestMsgId = @"0";
+    self.lastMsgId = @"0";
     [self getGroupChatFromServer];
 }
 
@@ -141,16 +186,19 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     // you can also set the maximum height in points with maxHeight
     // textView.maxHeight = 200.0f;
     textView.returnKeyType = UIReturnKeyGo; //just as an example
-    textView.font = [UIFont systemFontOfSize:15.0f];
+    //textView.font = [UIFont systemFontOfSize:15.0f];
+    textView.font = FONT_ProximaNova_Light_WITH_SIZE(16.0);
     textView.delegate = self;
     textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
     textView.backgroundColor = [UIColor whiteColor];
     textView.placeholder = @"Write comment";
+    textView.returnKeyType = UIReturnKeyDefault;
     
     // textView.text = @"test\n\ntest";
     // textView.animateHeightChange = NO; //turns off animation
     
     [self.view addSubview:_containerView];
+    
     
     UIImage *rawEntryBackground = [UIImage imageNamed:@"MessageEntryInputField.png"];
     UIImage *entryBackground = [rawEntryBackground stretchableImageWithLeftCapWidth:13 topCapHeight:22];
@@ -181,7 +229,8 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     
     [doneBtn setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.4] forState:UIControlStateNormal];
     doneBtn.titleLabel.shadowOffset = CGSizeMake (0.0, -1.0);
-    doneBtn.titleLabel.font = [UIFont boldSystemFontOfSize:18.0f];
+    //doneBtn.titleLabel.font = [UIFont boldSystemFontOfSize:18.0f];
+    doneBtn.titleLabel.font = FONT_ProximaNova_Regular_WITH_SIZE(16.0);
     
     [doneBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [doneBtn addTarget:self action:@selector(sendChatMessage) forControlEvents:UIControlEventTouchUpInside];
@@ -190,6 +239,7 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     [_containerView addSubview:doneBtn];
     _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
 }
+
 -(void)updateChatTypeTitle:(NSString *)firstStr secondStr:(NSString *)secondStr
 {
     NSRange range = NSMakeRange([firstStr length], [secondStr length]+1);
@@ -207,32 +257,42 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
 
 -(void)sendChatMessage
 {
-    NSString *msg = textView.text;
-    [textView resignFirstResponder];
-    if (self.chatViewMode == ChatModeGroup) {
-        NSMutableDictionary *postGroupMgsDict = [[NSMutableDictionary alloc]init];
-        [postGroupMgsDict setObject:self.currEvent.eventId forKey:kEventId];
-        [postGroupMgsDict setObject: [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]] forKey:kDateTime];
-        [postGroupMgsDict setObject:msg forKey:kChatMessage];
-        
-        [Utils startActivityIndicatorWithMessage:kPleaseWait];
-        [self postGroupChatToServer:postGroupMgsDict];
-       
+    NSString *trimmedString = [textView.text stringByTrimmingCharactersInSet:
+                               [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+     NSLog(@"trimmedString===== %@",trimmedString);
+    if(!trimmedString.length>0)
+    {
+        [TSMessage showNotificationWithTitle:@"Please write comment!" type:TSMessageNotificationTypeMessage];
     }
-    else{
-        
-        NSMutableDictionary *postPrivateMgsDict = [[NSMutableDictionary alloc]init];
-        [postPrivateMgsDict setObject:self.currEvent.eventId forKey:kEventId];
-        if (self.chooseMemberToChat.toUserId) {
-            [postPrivateMgsDict setObject:self.chooseMemberToChat.toUserId forKey:kReceiptId];
+    else
+    {
+        //[textView resignFirstResponder];
+        if (self.chatViewMode == ChatModeGroup) {
+            NSMutableDictionary *postGroupMgsDict = [[NSMutableDictionary alloc]init];
+            [postGroupMgsDict setObject:self.currEvent.eventId forKey:kEventId];
+            [postGroupMgsDict setObject: [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]] forKey:kDateTime];
+            [postGroupMgsDict setObject:trimmedString forKey:kChatMessage];
+            
+            [Utils startActivityIndicatorWithMessage:kPleaseWait];
+            [self postGroupChatToServer:postGroupMgsDict];
+            
         }
-        [postPrivateMgsDict setObject: [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]] forKey:kDateTime];
-        [postPrivateMgsDict setObject:msg forKey:kChatMessage];
-        
-        [Utils startActivityIndicatorWithMessage:kPleaseWait];
-        [self postPrivateChatToServer:postPrivateMgsDict];
+        else{
+            
+            NSMutableDictionary *postPrivateMgsDict = [[NSMutableDictionary alloc]init];
+            [postPrivateMgsDict setObject:self.currEvent.eventId forKey:kEventId];
+            if (self.chooseMemberToChat.toUserId) {
+                [postPrivateMgsDict setObject:self.chooseMemberToChat.toUserId forKey:kReceiptId];
+            }
+            [postPrivateMgsDict setObject: [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]] forKey:kDateTime];
+            [postPrivateMgsDict setObject:trimmedString forKey:kChatMessage];
+            
+            [Utils startActivityIndicatorWithMessage:kPleaseWait];
+            [self postPrivateChatToServer:postPrivateMgsDict];
+        }
+
     }
-    
+   
     
 }
 -(void)resignTextView
@@ -241,6 +301,8 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
 }
 //Code from Brett Schumann
 -(void) keyboardWillShow:(NSNotification *)note{
+    
+    
     // get keyboard size and loctaion
     CGRect keyboardBounds;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
@@ -249,7 +311,9 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     
     // Need to translate the bounds to account for rotation.
     keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
-    
+    //set table content Inset
+    self.chatTableView.contentInset =  UIEdgeInsetsMake(0, 0, keyboardBounds.size.height, 0);
+    keboardHieght = keyboardBounds.size.height;
     // get a rect for the textView frame
     CGRect containerFrame = _containerView.frame;
     containerFrame.origin.y = self.view.bounds.size.height - (keyboardBounds.size.height + containerFrame.size.height);
@@ -268,6 +332,9 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{
+    keboardHieght = 0.0;
+    self.chatTableView.contentInset =  UIEdgeInsetsMake(0, 0, 0, 0);
+    
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
     
@@ -288,6 +355,8 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     [UIView commitAnimations];
 }
 
+
+
 - (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height
 {
     float diff = (growingTextView.frame.size.height - height);
@@ -303,11 +372,65 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     self.chatTableView.hidden = NO;
     self.privateTableView.hidden = YES;
     self.containerView.hidden = NO;
-    [self.chatTableView reloadData];
+    
+    //refesh table on tab change
+    if(self.chatTableArray.count>0){
+    [self.chatTableArray removeAllObjects];
+    }
+    _isTableFirstTimeLoad = YES;
+    self.groupNextPage = 0;
+    self.lastMsgId = @"0";
+    [self getPrivateChatFromServer];
     
 }
+//For load earlier chat
+-(void)loadEarlierMessage
+{
+    _isTableFirstTimeLoad = NO;
+    [Utils startActivityIndicatorWithMessage:kPleaseWait];
+    if (self.chatViewMode == ChatModeGroup){
+        [self getGroupChatFromServer];
+    }
+    else{
+        [self getPrivateChatFromServer];
+    }
+}
+//For set unread message count
+-(void)setUnreadMessageCount
+{
+    if (self.privateUnreadMsgs>0) {
+        self.privateButton.titleLabel.font = FONT_ProximaNova_Bold_WITH_SIZE(15.0);
+        [self.privateButton setTitle:[NSString stringWithFormat:@"Private(%i)",self.privateUnreadMsgs] forState:UIControlStateNormal];
+    }
+    else{
+        self.privateButton.titleLabel.font = FONT_ProximaNova_Light_WITH_SIZE(15.0);
+        [self.privateButton setTitle:@"Private" forState:UIControlStateNormal];
+    }
+    
+    if (self.groupUnreadMsgs>0) {
+        self.groupButton.titleLabel.font = FONT_ProximaNova_Bold_WITH_SIZE(15.0);
+        [self.groupButton setTitle:[NSString stringWithFormat:@"Group(%i)",self.groupUnreadMsgs] forState:UIControlStateNormal];
+    }
+    else{
+        self.groupButton.titleLabel.font = FONT_ProximaNova_Light_WITH_SIZE(15.0);
+        [self.groupButton setTitle:@"Group" forState:UIControlStateNormal];
+    }
 
-///////////////////
+    
+
+}
+//For refresh chat
+
+-(void)timerCallToRefreshGroupChat
+{
+    NSLog(@"******timer Call To Refresh Group Chat******");
+    timer1=[NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(getLatestGroupChatFromServer) userInfo:nil repeats:YES];
+}
+-(void)timerCallToRefreshPrivateChat
+{
+    NSLog(@"******timer Call To Refresh Private Chat******");
+   timer2=[NSTimer scheduledTimerWithTimeInterval:8.0 target:self selector:@selector(getLatestPrivateChatFromServer) userInfo:nil repeats:YES];
+}
 
 
 #pragma mark - IBActions
@@ -323,8 +446,60 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     }
 }
 
-
+- (IBAction)muteGroupChatNotiBtnClicked:(id)sender {
+    [self resignTextView];
+    if (self.chatGroupMuteNotiMode == NotiModeMute)
+    {
+        
+        [[Utils sharedInstance] openActionSheetWithTitle:kImageTitle buttons:@[kUnmuteGroupConversation]
+                                              completion:^(UIActionSheet *actionSheet, NSInteger buttonIndex) {
+                                                  switch (buttonIndex)
+                                                  {
+                                                      case 0:
+                                                          [self unmuteGroupNotification];
+                                                          break;
+                                                          
+                                                      default:
+                                                          break;
+                                                  }
+                                              }];
+    }
+    else{
+   
+    [[Utils sharedInstance] openActionSheetWithTitle:kImageTitle buttons:@[kMuteGroupConversation]
+                                          completion:^(UIActionSheet *actionSheet, NSInteger buttonIndex) {
+                                              switch (buttonIndex)
+                                              {
+                                                  case 0:
+                                                      [self muteGroupNotification];
+                                                      break;
+                                                      
+                                                    default:
+                                                      break;
+                                              }
+                                          }];
+    }
+    
+}
+-(void)muteGroupNotification
+{
+    [Utils startActivityIndicatorWithMessage:kPleaseWait];
+    [self postEventNotificationStatusToServer:@"0"];
+}
+-(void)unmuteGroupNotification
+{
+    [Utils startActivityIndicatorWithMessage:kPleaseWait];
+    [self postEventNotificationStatusToServer:@"1"];
+}
 - (IBAction)groupClicked:(UIButton *)sender {
+    self.groupUnreadMsgs = 0;
+    [self setUnreadMessageCount];
+    if([timer2 isValid])
+    {
+        [timer2 invalidate];
+        timer2=nil;
+    }
+    self.btnMuteGroupChatNoti.hidden = NO;
     [self updateChatTypeTitle:@"Chatting with everyone in" secondStr:self.currEvent.name];
     self.chatViewMode = ChatModeGroup;
     self.groupButton.selected = YES;
@@ -333,17 +508,39 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     self.privateTableView.hidden = YES;
     self.containerView.hidden = NO;
     
+    //check for private chat list
     isSigleChatOn = NO;
-    [self.chatTableView reloadData];
     
-    [self.groupButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
-    [self.privateButton setTitleColor:Rgb2UIColor(170, 170, 170) forState:UIControlStateNormal];
+    [self.groupButton.titleLabel setTextColor:Rgb2UIColor(248, 80, 77)];
+    [self.privateButton.titleLabel setTextColor:Rgb2UIColor(170, 170, 170)];
+    
     [UIView animateWithDuration:0.3 animations:^{
         self.labelXConstraint.constant = 0;
         [self.view layoutIfNeeded];
     }];
+    
+    //refresh table on tab change
+    if(self.chatTableArray.count>0){
+        [self.chatTableArray removeAllObjects];
+    }
+    
+    _isTableFirstTimeLoad = YES;
+    self.groupNextPage = 0;
+    self.lastMsgId = @"0";
+    [self getGroupChatFromServer];
+    
 }
 - (IBAction)privateClicked:(UIButton *)sender {
+    self.privateUnreadMsgs = 0;
+    [self setUnreadMessageCount];
+    
+    if([timer1 isValid])
+    {
+        [timer1 invalidate];
+        timer1=nil;
+    }
+    
+    self.btnMuteGroupChatNoti.hidden = YES;
     self.chatViewMode = ChatModeSingle;
     if (isSigleChatOn) {
       //do nothing
@@ -356,17 +553,16 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     self.containerView.hidden = YES;
     }
     
-    [self.privateButton setTitleColor:Rgb2UIColor(248, 80, 77) forState:UIControlStateNormal];
-    [self.groupButton setTitleColor:Rgb2UIColor(170, 170, 170) forState:UIControlStateNormal];
+    [self.groupButton.titleLabel setTextColor:Rgb2UIColor(170, 170, 170)];
+    [self.privateButton.titleLabel setTextColor:Rgb2UIColor(248, 80, 77)];
+   
     [UIView animateWithDuration:0.3 animations:^{
+       
         self.labelXConstraint.constant = -(self.groupButton.size.width + 10);
         [self.view layoutIfNeeded];
     }];
     
-    if (self.privateChatListTableArray.count == 0) {
         [self getPrivateChatListFromServer];
-    }
-    
     
 }
 
@@ -375,10 +571,16 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.chatTableView.hidden == NO)
     {
-        if (self.chatTableArray.count>0)
-            return self.chatTableArray.count;
-        else
+        if (self.chatTableArray.count>0) {
+            if (self.groupNextPage>0) {
+                return self.chatTableArray.count+1;
+            }
+            else
+                return self.chatTableArray.count;
+        }
+        else{
             return 0;
+        }
     }
     else
     {
@@ -388,20 +590,34 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
             return 0;
     }
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.chatTableView.hidden == NO) {
-       return 72;
+        if (self.groupNextPage>0) {
+            if (indexPath.row==0) {
+                return 40;
+            }
+            else{
+                 return UITableViewAutomaticDimension;
+            }
+            
+        }
+        else{
+            return UITableViewAutomaticDimension;
+        }
     }
     else{
         return 60.0;
     }
+ 
    
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.chatTableView.hidden == NO) {
-        //Group cell
+        //Chat cell
             ChatTableViewCell *cell = nil;
             cell = (ChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
             if( !cell )
@@ -410,13 +626,45 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
                 cell = [nib objectAtIndex:0];
                
             }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell.loadMsgButton addTarget:self action:@selector(loadEarlierMessage) forControlEvents:UIControlEventTouchUpInside];
+        if (self.groupNextPage>0)
+        {
+            if (indexPath.row==0)
+            {
+                cell.loadMsgButton.hidden = NO;
+                cell.userImgView.hidden = YES;
+                cell.userNameLbl.hidden = YES;
+                cell.messageLbl.hidden = YES;
+                cell.dateTimeLbl.hidden = YES;
+            }
+            else{
+                cell.loadMsgButton.hidden = YES;
+                cell.userImgView.hidden = NO;
+                cell.userNameLbl.hidden = NO;
+                cell.messageLbl.hidden = NO;
+                cell.dateTimeLbl.hidden = NO;
+                
+                ChatModel *chatObj = self.chatTableArray[indexPath.row-1];
+                [cell setChatCellData:chatObj];
+            }
+        }
+        else{
+            cell.loadMsgButton.hidden = YES;
+            cell.userImgView.hidden = NO;
+            cell.userNameLbl.hidden = NO;
+            cell.messageLbl.hidden = NO;
+            cell.dateTimeLbl.hidden = NO;
+            
             ChatModel *chatObj = self.chatTableArray[indexPath.row];
             [cell setChatCellData:chatObj];
+        }
+        
             return cell;
             
     }
     else{
-        //Private cell
+        //Private chat list cell
         PrivateChatListCell *cell = nil;
         cell = (PrivateChatListCell *)[tableView dequeueReusableCellWithIdentifier:privCellIdentifier];
         if( !cell )
@@ -424,6 +672,7 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"PrivateChatListCell" owner:self options:nil];
             cell = [nib objectAtIndex:0];
         }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         PrivateChatListModel *chatmember = self.privateChatListTableArray[indexPath.row];
         [cell setPrivateChatListCellData:chatmember];
         return cell;
@@ -449,7 +698,7 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
 #pragma mark - Text View Delegate
 - (BOOL)growingTextView:(HPGrowingTextView *)growingTextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    NSLog(@"text----%@    growing Text---- %@",text,growingTextView.text);
+    //NSLog(@"text----%@    growing Text---- %@",text,growingTextView.text);
     if (growingTextView.text.length==0 && [text isEqualToString:@"\n"])
     {
         return NO;
@@ -474,12 +723,10 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     {
         stringAppended=[stringAppended substringToIndex:limit];
         textView.text=stringAppended;
-        [textView resignFirstResponder];
-        
         [self resignTextView];
         
-        NSString *msg=[NSString stringWithFormat:@"Maximum limit reached.You can add maximum %d characters",limit];
-        [Utils showOKAlertWithTitle:@"" message:msg];
+        NSString *msg=[NSString stringWithFormat:@"You can add maximum %d characters.",limit];
+        [TSMessage showNotificationInViewController:self title:@"Maximum limit reached." subtitle:msg type:TSMessageNotificationTypeMessage];
         
         return NO;
     }
@@ -488,7 +735,20 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     
 }
 
-
+#pragma mark - Touch Events
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch ;
+    touch = [[event allTouches] anyObject];
+    if ([touch view] == _containerView)
+    {
+        //Do what ever you want
+    }
+    else{
+        [self resignTextView];
+    }
+    
+}
 
 #pragma mark - APIs call
 
@@ -509,7 +769,14 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
                     chatList.imagePath = [response objectForKey:kChatImagePath];
                     [self.privateChatListTableArray addObject:chatList];
                 }
-            [self.privateTableView reloadData];
+               [self.privateTableView reloadData];
+                if (self.privateChatListTableArray.count) {
+                    [self.noDataLabel setHidden:YES];
+                }
+                else {
+                    [self.noDataLabel setHidden:NO];
+                }
+
                 
             }
             
@@ -522,57 +789,238 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
     if (self.chatTableArray.count==0) {
         [Utils startActivityIndicatorWithMessage:kPleaseWait];
     }
-       [ChatModel getGroupChatData:@{kPageNumber : @(1),kEventId:self.currEvent.eventId} withSuccessBlock:^(BOOL success, NSDictionary *response, NSError *error) {
+       [ChatModel getGroupChatData:@{kLastMsgId : self.lastMsgId,kEventId:self.currEvent.eventId} withSuccessBlock:^(BOOL success, NSDictionary *response, NSError *error) {
         [Utils stopActivityIndicatorInView];
         [Utils createMainQueue:^{
             if (success) {
-//                 self.chatTableArray = [[NSMutableArray alloc]init];
-//                if([response objectNonNullForKey:kPageNumber])
-//                    self.groupNextPage = numberValue([response objectForKey:kPageNumber]);
-//                if ([response objectNonNullForKey:kUserEvents]) {
-//                    NSArray *arrResult = [response objectForKey:kUserEvents];
-//                    for (NSDictionary *dict in arrResult) {
-//                        ChatModel *chat  = [[ChatModel alloc]initWithChatDictionary:dict];
-//                        [self.chatTableArray addObject:chat];
-//                    }
-//                
-//                }
-                 [self.chatTableView reloadData];
-                //            if (self.tableDataArray.count) {
-                //                [self.noDataLabel setHidden:YES];
-                //            }
-                //            else {
-                //                [self.noDataLabel setHidden:NO];
-                //
+                
+                if([response objectNonNullForKey:kPageNumber])
+                    self.groupNextPage = [[response objectForKey:kPageNumber] intValue];
+                NSLog(@"Group page===== %i key page======= %@",self.groupNextPage,[response objectForKey:kPageNumber]);
+                if ([response objectForKey:kChatInfo]) {
+                    NSArray *arrResult = [response objectForKey:kChatInfo];
+                    for (NSDictionary *dict in arrResult) {
+                        ChatModel *chatObj  = [[ChatModel alloc]initWithChatDictionary:dict];
+                        [self.chatTableArray insertObject:chatObj atIndex:0];
+                    }
+                }
+                
+                if (self.chatTableArray.count>0) {
+                    ChatModel *firstChatObj = [self.chatTableArray firstObject];
+                    ChatModel *lastChatObj = [self.chatTableArray lastObject];
+                    self.lastMsgId = firstChatObj.messageId;
+                    self.lastestMsgId = lastChatObj.messageId;
+                }
+                
+                [self.chatTableView reloadData];
+                
+                if (self.chatTableArray.count) {
+                    [self.noDataLabel setHidden:YES];
+                }
+                else {
+                    [self.noDataLabel setHidden:NO];
+                }
+                if(_isTableFirstTimeLoad)
+                {
+                    if (self.chatTableView .contentSize.height > self.chatTableView .frame.size.height)
+                    {
+                        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.chatTableArray.count inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                    }
+                }
+                else{
+                    if (self.chatTableView .contentSize.height > self.chatTableView .frame.size.height)
+                    {
+                        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:10 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                        
+                    }
+                }
+                //start auto refresh
+                [self performSelector:@selector(timerCallToRefreshGroupChat) withObject:nil afterDelay:0.0];
             }
                 
             }];
     }];
 }
 
-- (void)getPreviousChatFromServer
+
+- (void)getPrivateChatFromServer
 {
-    [ChatModel getGroupChatData:@{kPageNumber : @(1),kEventId:@""} withSuccessBlock:^(BOOL success, NSDictionary *response, NSError *error) {
-        //[Utils stopActivityIndicatorInView];
+    if (self.chatTableArray.count==0) {
+        [Utils startActivityIndicatorWithMessage:kPleaseWait];
+    }
+    [ChatModel getPrivateChatData:@{kLastMsgId : self.lastMsgId,kEventId:self.currEvent.eventId, kSenderId:self.chooseMemberToChat.userId} withSuccessBlock:^(BOOL success, NSDictionary *response, NSError *error) {
+        [Utils stopActivityIndicatorInView];
         [Utils createMainQueue:^{
             if (success) {
+                
                 if([response objectNonNullForKey:kPageNumber])
-                    self.groupNextPage = numberValue([response objectForKey:kPageNumber]);
-                if ([response objectNonNullForKey:kUserEvents]) {
-                    NSArray *arrResult = [response objectForKey:kUserEvents];
+                    self.groupNextPage = [[response objectForKey:kPageNumber] intValue];
+                NSLog(@"Private Page===== %i key page======= %@",self.groupNextPage,[response objectForKey:kPageNumber]);
+                if ([response objectForKey:kChatInfo]) {
+                    NSArray *arrResult = [response objectForKey:kChatInfo];
                     for (NSDictionary *dict in arrResult) {
                         ChatModel *chatObj  = [[ChatModel alloc]initWithChatDictionary:dict];
-                        [self.chatTableArray addObject:chatObj];
-                        [self.chatTableView reloadData];
+                        [self.chatTableArray insertObject:chatObj atIndex:0];
                     }
                 }
+               
+                
+                if (self.chatTableArray.count>0) {
+                    ChatModel *firstChatObj = [self.chatTableArray firstObject];
+                    ChatModel *lastChatObj = [self.chatTableArray lastObject];
+                    self.lastMsgId = firstChatObj.messageId;
+                    self.lastestMsgId = lastChatObj.messageId;
+                }
                 [self.chatTableView reloadData];
+                
+                if (self.chatTableArray.count) {
+                    [self.noDataLabel setHidden:YES];
+                }
+                else {
+                    [self.noDataLabel setHidden:NO];
+                }
+                
+                if(_isTableFirstTimeLoad)
+                {
+                    if (self.chatTableView .contentSize.height > self.chatTableView .frame.size.height)
+                    {
+                        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.chatTableArray.count inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                    }
+                }
+                else{
+                    if (self.chatTableView .contentSize.height > self.chatTableView .frame.size.height)
+                    {
+                        [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:10 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                        
+                    }
+                }
+                //start auto refresh
+                [self performSelector:@selector(timerCallToRefreshPrivateChat) withObject:nil afterDelay:0.0];
                 
             }
             
         }];
     }];
 }
+
+#pragma mark Get Latest Chat
+- (void)getLatestGroupChatFromServer {
+     NSLog(@"****** Refresh Group's Chat ******");
+    [ChatModel getLatestGroupChatData:@{kLatestMsgId : self.lastestMsgId,kEventId:self.currEvent.eventId} withSuccessBlock:^(BOOL success, NSDictionary *response, NSError *error) {
+        [Utils createMainQueue:^{
+            if (success) {
+                if (self.chatViewMode == ChatModeGroup) {
+                    if ([response objectForKey:kChatInfo]) {
+                        NSArray *arrResult = [response objectForKey:kChatInfo];
+                        
+                        //update unread message count
+                        self.groupUnreadMsgs = [[[response objectForKey:kBadgeCount] objectForKey:kGroupUnreadMsgCount] intValue];
+                        self.privateUnreadMsgs = [[[response objectForKey:kBadgeCount] objectForKey:kPrivateUnreadMsgCount] intValue];
+                        [self setUnreadMessageCount];
+                        
+                        for (NSDictionary *dict in arrResult) {
+                            ChatModel *chatObj  = [[ChatModel alloc]initWithChatDictionary:dict];
+                            if (![self.chatTableArray containsObject:chatObj]) {
+                                if (![chatObj.messageId isEqualToString:self.lastestMsgId]) {
+                                    [self.chatTableArray addObject:chatObj];
+                                }
+                            }
+                        }
+                    }
+                    
+                    NSArray *arrResult = [response objectForKey:kChatInfo];
+                    //for sort arry using msg id
+                    if (arrResult.count>0) {
+                        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"messageId" ascending:YES];
+                        NSArray * sortArr = [self.chatTableArray sortedArrayUsingDescriptors:@[sort]];
+                        self.chatTableArray = [NSMutableArray arrayWithArray:sortArr];
+                    }
+                    
+                    if (self.chatTableArray.count>0) {
+                        ChatModel *firstChatObj = [self.chatTableArray firstObject];
+                        ChatModel *lastChatObj = [self.chatTableArray lastObject];
+                        self.lastMsgId = firstChatObj.messageId;
+                        self.lastestMsgId = lastChatObj.messageId;
+                    }
+                                        
+                    if (arrResult.count>0) {
+                         [self.chatTableView reloadData];
+                        if (self.chatTableView .contentSize.height > self.chatTableView .frame.size.height)
+                        {
+                            [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.chatTableArray.count inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                        }
+                       
+                    }
+                    
+                }
+                else{
+                //do nothing
+                }
+              
+         
+            }
+            
+        }];
+    }];
+}
+
+- (void)getLatestPrivateChatFromServer {
+   NSLog(@"****** Refresh Private's Chat ******");
+    [ChatModel getLatestPrivateChatData:@{kLatestMsgId : self.lastestMsgId,kEventId:self.currEvent.eventId, kSenderId:self.chooseMemberToChat.userId} withSuccessBlock:^(BOOL success, NSDictionary *response, NSError *error) {
+        [Utils createMainQueue:^{
+            if (success) {
+                if (self.chatViewMode == ChatModeSingle) {
+                    if ([response objectForKey:kChatInfo]) {
+                        
+                        NSArray *arrResult = [response objectForKey:kChatInfo];
+                        //update unread message count
+                        self.groupUnreadMsgs = [[[response objectForKey:kBadgeCount] objectForKey:kGroupUnreadMsgCount] intValue];
+                        self.privateUnreadMsgs = [[[response objectForKey:kBadgeCount] objectForKey:kPrivateUnreadMsgCount] intValue];
+                        [self setUnreadMessageCount];
+                        
+                        for (NSDictionary *dict in arrResult) {
+                            ChatModel *chatObj  = [[ChatModel alloc]initWithChatDictionary:dict];
+                            if (![self.chatTableArray containsObject:chatObj]) {
+                                if (![chatObj.messageId isEqualToString:self.lastestMsgId]) {
+                                    [self.chatTableArray addObject:chatObj];
+                                }
+                            }
+                        }
+                    }
+                    NSArray *arrResult = [response objectForKey:kChatInfo];
+                    //for sort arry using msg id
+                    if (arrResult.count>0) {
+                        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"messageId" ascending:YES];
+                        NSArray * sortArr = [self.chatTableArray sortedArrayUsingDescriptors:@[sort]];
+                        self.chatTableArray = [NSMutableArray arrayWithArray:sortArr];
+                    }
+                    
+                    if (self.chatTableArray.count>0) {
+                        ChatModel *firstChatObj = [self.chatTableArray firstObject];
+                        ChatModel *lastChatObj = [self.chatTableArray lastObject];
+                        self.lastMsgId = firstChatObj.messageId;
+                        self.lastestMsgId = lastChatObj.messageId;
+                    }
+                    
+                    if (arrResult.count>0) {
+                        [self.chatTableView reloadData];
+                        if (self.chatTableView .contentSize.height > self.chatTableView .frame.size.height)
+                        {
+                            [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.chatTableArray.count inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                        }
+                    }
+                    
+                }
+                else{
+                //do nothing
+                }
+            }
+            
+        }];
+    }];
+}
+
+
 #pragma mark Post Chat
 -(void)postGroupChatToServer:(NSDictionary*)dict
 {
@@ -581,9 +1029,28 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
         [Utils createMainQueue:^{
             if (success) {
                 textView.text = @"";
-                ChatModel *chatObj  = [[ChatModel alloc]initWithChatDictionary:response];
+                NSDictionary *dict = [[response objectForKey:kChatInfo] lastObject];
+                
+                //update unread message count
+                self.groupUnreadMsgs = [[dict objectForKey:kGroupUnreadMsgCount] intValue];
+                self.privateUnreadMsgs = [[dict objectForKey:kPrivateUnreadMsgCount] intValue];
+                [self setUnreadMessageCount];
+                
+                ChatModel *chatObj  = [[ChatModel alloc]initWithChatDictionary:dict];
                 [self.chatTableArray addObject:chatObj];
+                if (self.chatTableArray.count>0) {
+                    ChatModel *firstChatObj = [self.chatTableArray firstObject];
+                    ChatModel *lastChatObj = [self.chatTableArray lastObject];
+                    self.lastMsgId = firstChatObj.messageId;
+                    self.lastestMsgId = lastChatObj.messageId;
+                }
+
                 [self.chatTableView reloadData];
+                if (self.chatTableView .contentSize.height > self.chatTableView .frame.size.height)
+                {
+                    [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.chatTableArray.count inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                }
+                
             }
             
         }];
@@ -597,40 +1064,49 @@ static NSString *privCellIdentifier = @"PrivateChatListCell";
         [Utils createMainQueue:^{
             if (success) {
                 textView.text = @"";
-                ChatModel *chatObj  = [[ChatModel alloc]initWithChatDictionary:response];
+                NSDictionary *dict = [[response objectForKey:kChatInfo] lastObject];
+                //update unread message count
+                self.groupUnreadMsgs = [[dict objectForKey:kGroupUnreadMsgCount] intValue];
+                self.privateUnreadMsgs = [[dict objectForKey:kPrivateUnreadMsgCount] intValue];
+                [self setUnreadMessageCount];
+                
+                ChatModel *chatObj  = [[ChatModel alloc]initWithChatDictionary:dict];
                 [self.chatTableArray addObject:chatObj];
+                if (self.chatTableArray.count>0) {
+                    ChatModel *firstChatObj = [self.chatTableArray firstObject];
+                    ChatModel *lastChatObj = [self.chatTableArray lastObject];
+                    self.lastMsgId = firstChatObj.messageId;
+                    self.lastestMsgId = lastChatObj.messageId;
+                }
                 [self.chatTableView reloadData];
+                if (self.chatTableView .contentSize.height > self.chatTableView .frame.size.height)
+                {
+                [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.chatTableArray.count inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                }
             }
             
         }];
     }];
 }
 
-#pragma mark Refresh Chat
-- (void)getLatestChatFromServer {
-    
-    [ChatModel getLatestChatData:@{kPageNumber : @(1),kEventId:@""} withSuccessBlock:^(BOOL success, NSDictionary *response, NSError *error) {
-        //[Utils stopActivityIndicatorInView];
+
+#pragma mark Get Chat
+- (void)postEventNotificationStatusToServer:(NSString*)notificationStatus {
+  
+    [ChatModel setEventMuteUnmuteNotification:@{kNotificationEvent : notificationStatus,kEventId:self.currEvent.eventId} withSuccessBlock:^(BOOL success, NSDictionary *response, NSError *error) {
+        [Utils stopActivityIndicatorInView];
         [Utils createMainQueue:^{
             if (success) {
-                if([response objectNonNullForKey:kPageNumber])
-                    self.groupNextPage = numberValue([response objectForKey:kPageNumber]);
-                if ([response objectNonNullForKey:kUserEvents]) {
-                    self.chatTableArray = [[NSMutableArray alloc]init];
-                    NSArray *arrResult = [response objectForKey:kUserEvents];
-                    for (NSDictionary *dict in arrResult) {
-                        ChatModel *chat  = [[ChatModel alloc]initWithChatDictionary:dict];
-                        [self.chatTableArray addObject:chat];
-                    }
-                    
+                if ([notificationStatus isEqualToString:@"0"]) {
+                    self.chatGroupMuteNotiMode = NotiModeMute;
+                    [self.btnMuteGroupChatNoti setImage:[UIImage imageNamed:@"unmute"] forState:UIControlStateNormal];
                 }
-                [self.chatTableView reloadData];
-                //            if (self.tableDataArray.count) {
-                //                [self.noDataLabel setHidden:YES];
-                //            }
-                //            else {
-                //                [self.noDataLabel setHidden:NO];
-                //
+                if ([notificationStatus isEqualToString:@"1"]) {
+                    self.chatGroupMuteNotiMode = NotiModeUnmute;
+                    [self.btnMuteGroupChatNoti setImage:[UIImage imageNamed:@"mute"] forState:UIControlStateNormal];
+                }
+                
+                
             }
             
         }];

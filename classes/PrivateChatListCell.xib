@@ -3,9 +3,11 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <mutableArray key="Proxima Nova Regular.otf">
+            <string>ProximaNova-Regular</string>
+        </mutableArray>
         <mutableArray key="ProximaNova-Light.otf">
             <string>ProximaNova-Light</string>
             <string>ProximaNova-Light</string>
@@ -58,20 +60,33 @@
                         <color key="textColor" red="0.3803921569" green="0.3803921569" blue="0.3803921569" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Forward" translatesAutoresizingMaskIntoConstraints="NO" id="sao-hX-YHl">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ArrowImage" translatesAutoresizingMaskIntoConstraints="NO" id="sao-hX-YHl">
                         <rect key="frame" x="302" y="19" width="10" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="10" id="rwp-dh-bai"/>
                             <constraint firstAttribute="height" constant="20" id="xjm-qo-x3D"/>
                         </constraints>
                     </imageView>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="220" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="zTz-oz-Ifm" userLabel="lblBadge">
+                        <rect key="frame" x="269" y="17" width="25" height="25"/>
+                        <color key="backgroundColor" red="0.95686274510000002" green="0.16078431369999999" blue="0.25490196079999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="Bfo-7z-vgT"/>
+                            <constraint firstAttribute="width" constant="25" id="Re2-ij-3qj"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="ProximaNova-Regular" family="Proxima Nova" pointSize="13"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="912-ic-hWB" secondAttribute="trailing" id="8Kh-zj-wn2"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="ctC-SK-hUj" secondAttribute="trailing" constant="51" id="H0Z-U0-u56"/>
+                    <constraint firstItem="zTz-oz-Ifm" firstAttribute="leading" secondItem="ctC-SK-hUj" secondAttribute="trailing" constant="8" id="EOZ-L8-UxG"/>
+                    <constraint firstItem="zTz-oz-Ifm" firstAttribute="centerY" secondItem="L8K-hO-hIa" secondAttribute="centerY" id="GGU-RK-heB"/>
                     <constraint firstItem="ctC-SK-hUj" firstAttribute="top" secondItem="L8K-hO-hIa" secondAttribute="top" constant="21" id="JPX-gV-IXB"/>
                     <constraint firstItem="wsM-PX-Kix" firstAttribute="leading" secondItem="L8K-hO-hIa" secondAttribute="leading" constant="8" id="N3p-Lh-Rot"/>
                     <constraint firstItem="sao-hX-YHl" firstAttribute="centerY" secondItem="L8K-hO-hIa" secondAttribute="centerY" id="Wav-h3-Ddc"/>
+                    <constraint firstItem="sao-hX-YHl" firstAttribute="leading" secondItem="zTz-oz-Ifm" secondAttribute="trailing" constant="8" id="X4q-SN-EJv"/>
                     <constraint firstItem="MDd-Hr-Xjz" firstAttribute="top" secondItem="L8K-hO-hIa" secondAttribute="top" constant="3" id="Yb3-gr-25A"/>
                     <constraint firstAttribute="bottom" secondItem="912-ic-hWB" secondAttribute="bottom" constant="1" id="aiR-UX-hQF"/>
                     <constraint firstAttribute="trailing" secondItem="MDd-Hr-Xjz" secondAttribute="trailing" constant="23" id="gAU-oU-7bO"/>
@@ -83,6 +98,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="timeLbl" destination="MDd-Hr-Xjz" id="Kvd-jO-VFX"/>
+                <outlet property="unreadMegCountLbl" destination="zTz-oz-Ifm" id="GR8-P7-0hK"/>
                 <outlet property="userImgView" destination="wsM-PX-Kix" id="9Oz-3W-qEh"/>
                 <outlet property="userNameLbl" destination="ctC-SK-hUj" id="BcK-BS-m6T"/>
             </connections>
@@ -90,6 +106,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="Forward" width="18" height="27"/>
+        <image name="ArrowImage" width="18" height="27"/>
     </resources>
 </document>

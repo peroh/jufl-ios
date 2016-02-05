@@ -151,6 +151,7 @@
         }
         
     }
+    
     if (self.event) {
          [self displayEventData:self.event];
     }
@@ -285,6 +286,13 @@
     /********************/
     
     self.goingLabel.text = [NSString stringWithFormat:@"%@ going",event.goingCount];
+    if ([event.goingCount intValue] == 1) {
+       self.chatButton.enabled = NO;
+    }
+    else{
+        self.chatButton.enabled = YES;
+    }
+    
     if (event.isDeleted) {
         self.additionalInfoLabel.text = event.cancelReason;
     }

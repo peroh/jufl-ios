@@ -17,12 +17,15 @@ typedef void (^ChatBlock) (BOOL success, NSDictionary *response, NSError *error)
 @property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSDate *chatDateTime;
 @property (nonatomic, strong) NSNumber *eventId;
-@property (nonatomic, strong) NSNumber *messageId;
+@property (nonatomic, strong) NSString *messageId;
 
 
 - (instancetype)initWithChatDictionary:(NSDictionary *)dict;
 + (void)getGroupChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block;
-+ (void)getLatestChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block;
++ (void)getPrivateChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block;
++ (void)getLatestGroupChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block;
++ (void)getLatestPrivateChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block;
 + (void)postGroupChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block;
 + (void)postPrivateChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block;
++ (void)setEventMuteUnmuteNotification:(NSDictionary *)params withSuccessBlock:(ChatBlock)block;
 @end

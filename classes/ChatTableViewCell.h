@@ -13,5 +13,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *userNameLbl;
 @property (weak, nonatomic) IBOutlet UILabel *messageLbl;
 @property (weak, nonatomic) IBOutlet UILabel *dateTimeLbl;
+@property (weak, nonatomic) IBOutlet UIButton *loadMsgButton;
 - (void)setChatCellData:(ChatModel *)chatData;;
 @end

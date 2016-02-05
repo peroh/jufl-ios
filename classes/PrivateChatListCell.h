@@ -13,5 +13,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *userImgView;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLbl;
 @property (weak, nonatomic) IBOutlet UILabel *timeLbl;
+@property (weak, nonatomic) IBOutlet UILabel *unreadMegCountLbl;
 - (void)setPrivateChatListCellData :(PrivateChatListModel *)chatList;
 @end

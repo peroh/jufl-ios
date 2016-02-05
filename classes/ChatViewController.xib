@@ -11,14 +11,19 @@
             <string>ProximaNova-Light</string>
             <string>ProximaNova-Light</string>
         </mutableArray>
+        <mutableArray key="ProximaNova-Semibold.otf">
+            <string>ProximaNova-Semibold</string>
+        </mutableArray>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatViewController">
             <connections>
+                <outlet property="btnMuteGroupChatNoti" destination="jty-l2-3LP" id="Fcf-vd-qd9"/>
                 <outlet property="chatTableView" destination="uv9-a9-dSJ" id="g47-6d-hOO"/>
                 <outlet property="chatTypeTitleLbl" destination="ZBE-dr-kFk" id="Cjk-fJ-paP"/>
                 <outlet property="groupButton" destination="3eu-fb-tk7" id="844-IZ-KFe"/>
                 <outlet property="labelXConstraint" destination="kfg-Ii-EZj" id="rwh-z0-L8e"/>
+                <outlet property="noDataLabel" destination="beU-xR-Trj" id="3yY-pW-7d3"/>
                 <outlet property="privateButton" destination="mrh-ql-hoZ" id="pAc-JO-Yk5"/>
                 <outlet property="privateTableView" destination="D0A-EJ-253" id="EB4-l8-xpY"/>
                 <outlet property="segmentView" destination="39z-e9-I2B" id="gSy-kz-cl3"/>
@@ -118,7 +123,7 @@
                             <color key="textColor" red="0.3803921569" green="0.3803921569" blue="0.3803921569" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="uv9-a9-dSJ">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="72" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="uv9-a9-dSJ">
                             <rect key="frame" x="0.0" y="69" width="320" height="389"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -138,6 +143,16 @@
                                 <outlet property="delegate" destination="-1" id="hyi-7U-sB8"/>
                             </connections>
                         </tableView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No chat available" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beU-xR-Trj">
+                            <rect key="frame" x="15" y="239" width="290" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="290" id="oCD-XG-MX5"/>
+                                <constraint firstAttribute="height" constant="21" id="y1X-nn-bOV"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="17"/>
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -148,6 +163,8 @@
                         <constraint firstAttribute="trailing" secondItem="ZBE-dr-kFk" secondAttribute="trailing" constant="20" id="Nx2-qu-22h"/>
                         <constraint firstItem="39z-e9-I2B" firstAttribute="leading" secondItem="zyp-eA-aXh" secondAttribute="leading" id="U3f-I5-4oA"/>
                         <constraint firstItem="uv9-a9-dSJ" firstAttribute="leading" secondItem="zyp-eA-aXh" secondAttribute="leading" id="VQ7-R5-END"/>
+                        <constraint firstItem="beU-xR-Trj" firstAttribute="centerY" secondItem="zyp-eA-aXh" secondAttribute="centerY" id="Y3D-Og-Ivw"/>
+                        <constraint firstItem="beU-xR-Trj" firstAttribute="centerX" secondItem="zyp-eA-aXh" secondAttribute="centerX" id="avz-ws-fjQ"/>
                         <constraint firstAttribute="trailing" secondItem="D0A-EJ-253" secondAttribute="trailing" id="bn0-c5-RDh"/>
                         <constraint firstItem="ZBE-dr-kFk" firstAttribute="leading" secondItem="zyp-eA-aXh" secondAttribute="leading" constant="20" id="czb-CF-7Qf"/>
                         <constraint firstAttribute="trailing" secondItem="39z-e9-I2B" secondAttribute="trailing" id="mSH-6m-ye0"/>
@@ -186,9 +203,12 @@
                                 <constraint firstAttribute="height" constant="44" id="cb2-hy-eQF"/>
                                 <constraint firstAttribute="width" constant="44" id="ldo-or-4xa"/>
                             </constraints>
-                            <state key="normal" image="reload">
+                            <state key="normal" image="mute">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="muteGroupChatNotiBtnClicked:" destination="-1" eventType="touchUpInside" id="wah-cS-ZmO"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.1647058824" green="0.16862745100000001" blue="0.16862745100000001" alpha="0.94999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
@@ -220,6 +240,6 @@
     </objects>
     <resources>
         <image name="BackCircle" width="24" height="24"/>
-        <image name="reload" width="24" height="24"/>
+        <image name="mute" width="24" height="24"/>
     </resources>
 </document>

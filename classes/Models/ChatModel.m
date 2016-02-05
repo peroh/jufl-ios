@@ -7,59 +7,12 @@
 //
 
 #import "ChatModel.h"
-/*
- /////private
- "chatInfo":
- {
- "message": 110,
- "event_id": "317",
- "sender_id": 109,
- "receipt_id": 110,
- "chat_msg_id": 24,
- "chat_time": 110,
- "groupbadgeCount": 5,
- "privatebadgeCount": 5
- },
- "userInfo":
- {
- "id": null,
- "first_name": "Dhirendra",
- "last_name": "Kumar",
- "image": "http://54.66.156.48/jufl_files/profile/http://54.66.156.48/jufl_files/profile/56a8a865105f60.93702834.jpg"
- }
- }
-//Group
- {
- "Success": 1,
- "Message": "",
- "Result": [
- {
- "chatInfo": {
- "message": "Hellos ",
- "event_id": "322",
- "sender_id": 109,
- "chat_msg_id": 24,
- "chat_time": "1453969282",
- "groupBadgeCount": 0,
- "privateBadgeCount": 0
- },
- "userInfo": {
- "id": "109",
- "first_name": "Dhirendra",
- "last_name": "Kumar",
- "image": "http://54.66.156.48/jufl_files/profile/56a8a865105f60.93702834.jpg"
- }
- }
- 
- */
-
-
-NSString *const kUserId = @"id";
-NSString *const kChatFirstName = @"first_name";
-NSString *const kChatLastName = @"last_name";
-NSString *const kChatImage = @"image";
+NSString *const kGroupUserId = @"id";
+NSString *const kChatGroupFirstName = @"first_name";
+NSString *const kChatGroupLastName = @"last_name";
+NSString *const kChatGroupImage = @"image";
 NSString *const kChatDateTime = @"chat_time";
-NSString *const kChatEventId = @"event_id";
+NSString *const kChatGroupEventId = @"event_id";
 NSString *const kChatMessageId = @"chat_msg_id";
 
 @implementation ChatModel
@@ -68,30 +21,59 @@ NSString *const kChatMessageId = @"chat_msg_id";
     
     if (self && [dict isKindOfClass:[NSDictionary class]]) {
         if ([dict objectForKey:kUserInfo]) {
-            self.userId = [self objectOrNilForKey:kUserId fromDictionary:[dict objectForKey:kUserInfo]];
-            self.fisrtName = [self objectOrNilForKey:kChatFirstName fromDictionary:[dict objectForKey:kUserInfo]];
-            self.lastName =  [self objectOrNilForKey:kChatLastName fromDictionary:[dict objectForKey:kUserInfo]];
-            self.image = [self objectOrNilForKey:kChatImage fromDictionary:[dict objectForKey:kUserInfo]];
+            self.userId = [self objectOrNilForKey:kGroupUserId fromDictionary:[dict objectForKey:kUserInfo]];
+            self.fisrtName = [self objectOrNilForKey:kChatGroupFirstName fromDictionary:[dict objectForKey:kUserInfo]];
+            self.lastName =  [self objectOrNilForKey:kChatGroupLastName fromDictionary:[dict objectForKey:kUserInfo]];
+            self.image = [self objectOrNilForKey:kChatGroupImage fromDictionary:[dict objectForKey:kUserInfo]];
 
         }
-        if ([dict objectForKey:kChatInfo]) {
-            self.eventId = [self objectOrNilForKey:kChatEventId fromDictionary:[dict objectForKey:kChatInfo]];
-            self.chatDateTime = [NSDate dateWithTimeIntervalSince1970:[[self objectOrNilForKey:kChatDateTime fromDictionary:[dict objectForKey:kChatInfo]] doubleValue]];
-            self.message =  [self objectOrNilForKey:kChatMessage fromDictionary:[dict objectForKey:kChatInfo]];
-            self.messageId = [self objectOrNilForKey:kChatMessageId fromDictionary:[dict objectForKey:kChatInfo]];
-        }
+            self.eventId = [self objectOrNilForKey:kChatGroupEventId fromDictionary:dict];
+            self.chatDateTime = [NSDate dateWithTimeIntervalSince1970:[[self objectOrNilForKey:kChatDateTime fromDictionary:dict] doubleValue]];
+            self.message =  [self objectOrNilForKey:kChatMessage fromDictionary:dict];
+            self.messageId = [NSString stringWithFormat:@"%@",[self objectOrNilForKey:kChatMessageId fromDictionary:dict]];
     }
     return self;
 }
 
-//for get chat
+//for get group chat
 + (void)getGroupChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block {
     NSMutableDictionary *parameters = [params mutableCopy];
     
     if ([NRValidation isValidString:[[SharedClass sharedInstance] deviceToken]]) {
         [parameters setObject:[[SharedClass sharedInstance] deviceToken] forKey:kDeviceToken];
     }
-    [Connection callServiceWithName:kGetChatService postData:parameters callBackBlock:^(id response, NSError *error) {
+    [Connection callServiceWithName:kGetGroupChatService postData:parameters callBackBlock:^(id response, NSError *error) {
+        if(success(response, error)) {
+            WebServiceResponse *webResponse = [[WebServiceResponse alloc] initWithData:((NSDictionary *)response)];
+            
+            if(webResponse)
+            {
+                if(webResponse.result.count>0) {
+                    block(YES, [webResponse.result lastObject], error);
+                    
+                }
+                else {
+                    block(NO, nil, error);
+                }
+            }
+            else {
+                block(NO, nil, error);
+            }
+        }
+        else {
+            block(NO, nil, error);
+        }
+    }];
+}
+
+//for get private chat
++ (void)getPrivateChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block {
+    NSMutableDictionary *parameters = [params mutableCopy];
+    
+    if ([NRValidation isValidString:[[SharedClass sharedInstance] deviceToken]]) {
+        [parameters setObject:[[SharedClass sharedInstance] deviceToken] forKey:kDeviceToken];
+    }
+    [Connection callServiceWithName:kGetPrivateChatService postData:parameters callBackBlock:^(id response, NSError *error) {
         if(success(response, error)) {
             WebServiceResponse *webResponse = [[WebServiceResponse alloc] initWithData:((NSDictionary *)response)];
             
@@ -116,13 +98,43 @@ NSString *const kChatMessageId = @"chat_msg_id";
 }
 
 //for get latest chat or refresh
-+ (void)getLatestChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block {
++ (void)getLatestGroupChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block {
     NSMutableDictionary *parameters = [params mutableCopy];
     
     if ([NRValidation isValidString:[[SharedClass sharedInstance] deviceToken]]) {
         [parameters setObject:[[SharedClass sharedInstance] deviceToken] forKey:kDeviceToken];
     }
-    [Connection callServiceWithName:kGetLatestChatService postData:parameters callBackBlock:^(id response, NSError *error) {
+    [Connection callServiceWithName:kGetLatestGroupChatService postData:parameters callBackBlock:^(id response, NSError *error) {
+        if(success(response, error)) {
+            WebServiceResponse *webResponse = [[WebServiceResponse alloc] initWithData:((NSDictionary *)response)];
+            
+            if(webResponse)
+            {
+                if(webResponse.result.count>0) {
+                    block(YES, [webResponse.result lastObject], error);
+                    
+                }
+                else {
+                    block(NO, nil, error);
+                }
+            }
+            else {
+                block(NO, nil, error);
+            }
+        }
+        else {
+            block(NO, nil, error);
+        }
+    }];
+}
+
++ (void)getLatestPrivateChatData:(NSDictionary *)params withSuccessBlock:(ChatBlock)block {
+    NSMutableDictionary *parameters = [params mutableCopy];
+    
+    if ([NRValidation isValidString:[[SharedClass sharedInstance] deviceToken]]) {
+        [parameters setObject:[[SharedClass sharedInstance] deviceToken] forKey:kDeviceToken];
+    }
+    [Connection callServiceWithName:kGetLatestPrivateChatService postData:parameters callBackBlock:^(id response, NSError *error) {
         if(success(response, error)) {
             WebServiceResponse *webResponse = [[WebServiceResponse alloc] initWithData:((NSDictionary *)response)];
             
@@ -217,7 +229,36 @@ NSString *const kChatMessageId = @"chat_msg_id";
     }];
 }
 
-
+//for mute and unmute event notification
++ (void)setEventMuteUnmuteNotification:(NSDictionary *)params withSuccessBlock:(ChatBlock)block {
+    NSMutableDictionary *parameters = [params mutableCopy];
+    
+    if ([NRValidation isValidString:[[SharedClass sharedInstance] deviceToken]]) {
+        [parameters setObject:[[SharedClass sharedInstance] deviceToken] forKey:kDeviceToken];
+    }
+    [Connection callServiceWithName:kGetEventNotification postData:parameters callBackBlock:^(id response, NSError *error) {
+        if(success(response, error)) {
+            WebServiceResponse *webResponse = [[WebServiceResponse alloc] initWithData:((NSDictionary *)response)];
+            
+            if(webResponse)
+            {
+                if(webResponse.result.count>0) {
+                    block(YES, [webResponse.result lastObject], error);
+                    
+                }
+                else {
+                    block(NO, nil, error);
+                }
+            }
+            else {
+                block(NO, nil, error);
+            }
+        }
+        else {
+            block(NO, nil, error);
+        }
+    }];
+}
 
 - (id)objectOrNilForKey:(id)aKey fromDictionary:(NSDictionary *)dict
 {

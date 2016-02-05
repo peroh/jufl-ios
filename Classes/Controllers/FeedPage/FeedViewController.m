@@ -194,11 +194,9 @@ static NSString *cellIdentifier = @"FeedTableViewCell";
     
     [self.feedTable reloadData];
     if (self.tableDataArray.count>0) {
-        // [self.feedTable setHidden:NO];
         [self.noDataLabel setHidden:YES];
     }
     else {
-        //[self.feedTable setHidden:YES];
         [self.noDataLabel setHidden:NO];
     }
     [self.feedTable scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];

@@ -198,4 +198,7 @@
 #define KErrorCameraPermission @"Please check camera permission"
 #define KNoCameraFound @"No Camera found"
 
+#define kMuteGroupConversation @"Mute group conversation"
+#define kUnmuteGroupConversation @"Unmute group conversation"
+
 #endif
