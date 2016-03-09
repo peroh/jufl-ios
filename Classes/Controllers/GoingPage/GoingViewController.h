@@ -11,5 +11,7 @@
 @interface GoingViewController : UIViewController
 
 - (instancetype)initWithEvent:(EventModel *)event withMode:(GoingViewMode)mode;
-- (instancetype)initWithEventMode:(EventModel *)event withMode:(GoingViewMode)mode withPastCurrentMode:(CurrentPastFeedTableViewMode)pastCurrentMode ;
+- (instancetype)initWithEventMode:(EventModel *)event withMode:(GoingViewMode)mode withPastCurrentMode:(CurrentPastFeedTableViewMode)pastCurrentMode;
+@property (nonatomic, strong) NSString * openTabStr;
+
 @end

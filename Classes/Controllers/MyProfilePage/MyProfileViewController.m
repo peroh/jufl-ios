@@ -271,6 +271,7 @@ static NSString *cellIdentifier = @"FeedTableViewCell";
         goingViewMode = GoingViewModeInvitee;
     }
     GoingViewController *goingViewController = [[GoingViewController alloc]initWithEventMode:event withMode:goingViewMode withPastCurrentMode:self.tableViewMode];
+    goingViewController.openTabStr = kTabGoing;
     goingViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:goingViewController animated:YES];
 }

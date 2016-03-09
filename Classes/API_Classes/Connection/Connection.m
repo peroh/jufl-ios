@@ -94,11 +94,8 @@
         [Utils createMainQueue:^{
            [Utils showToastWithMessage:kInternetConectionError];
         }];
-        
-
         responeBlock(nil,[NSError errorWithDomain:@"internet error" code:-1 userInfo:nil]);
         return;
-        
     }
     NSMutableDictionary *params=[NSMutableDictionary dictionaryWithDictionary:postData];
     
@@ -119,11 +116,15 @@
     
     //[self responseString:[NSURL URLWithString:urlString] params:postData];
     NSURL *baseUrl=[NSURL URLWithString:kBaseURL];
-    DLog(@"Request for %@/%@Parameters \n %@",baseUrl.absoluteString, serviceName,params);
+    
+    NSData *data=[NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
+    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+    DLog(@"Request for %@/%@ Parameters \n %@   json=== %@",baseUrl.absoluteString, serviceName,params,newStr);
 
     AFSharedClient *client=[AFSharedClient sharedClient];
     NSString *bundleVersion=[NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey]];
-
+    DLog(@"bundleVersion for request=== %@",bundleVersion);
     if(SYSTEM_VERSION_LESS_THAN(@"7.0"))
     {
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseUrl];
@@ -239,7 +240,6 @@
         
     }
     
-  //  NSString *urlString = [kBaseURL stringByAppendingPathComponent:serviceName];
     
     NSURL *baseUrl=[NSURL URLWithString:kBaseURL];
     DLog(@"Request for %@/%@Parameters \n %@",baseUrl.absoluteString, serviceName,postData);
@@ -334,7 +334,6 @@
 //post images with data in multipart
 +(void)callServiceWithImages:(NSArray *)imagesArray videos:(NSArray *)videosArray params:(NSDictionary *)postData  serviceIdentifier:(NSString*)serviceName callBackBlock:(void (^)(id response,NSError *error))responeBlock
 {
-  //  NSString *urlString = [kBaseURL stringByAppendingPathComponent:serviceName];
     NSURL *baseUrl=[NSURL URLWithString:kBaseURL];
     AFSharedClient *client=[AFSharedClient sharedClient];
     NSMutableDictionary *params=[NSMutableDictionary dictionaryWithDictionary:postData];

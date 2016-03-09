@@ -31,6 +31,9 @@ typedef void (^NotificationBlock)(BOOL success, NSDictionary *notificationDic, N
 @property (nonatomic, strong) NSString *goingCount;
 @property (nonatomic, strong) NSString *cancelReason;
 
+@property (nonatomic, assign) int goingBadgeCount;
+@property (nonatomic, assign) int cantGoingBadgeCount;
+
 + (void)createEventWithParams:(NSDictionary *)params withHandler:(EventModelBlock)block;
 
 + (NSDictionary *)getDictionaryFromModel:(EventModel *)event addLocation:(BOOL)location;

@@ -250,7 +250,7 @@ static NSString *cellIdentifier = @"SettingTableViewCell";
 
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 //{
-//    return [[UIScreen mainScreen] bounds].size.height/8;
+//    return [[UIScreen mainScreen] bounds].size.height;
 //}
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -300,23 +300,23 @@ static NSString *cellIdentifier = @"SettingTableViewCell";
     [cell.textField setHidden:YES];
     [cell.textField setTextColor:Rgb2UIColor(97, 97, 97)];
     cell.textField.font = [UIFont fontWithName:@"ProximaNova-Light" size:15];
-    cell.textLabel.font=[UIFont fontWithName:@"ProximaNova-Light" size:15];
-    [cell.textLabel setTextColor:Rgb2UIColor(97, 97, 97)];
+    cell.indexLabel.font=[UIFont fontWithName:@"ProximaNova-Light" size:15];
+    [cell.indexLabel setTextColor:Rgb2UIColor(97, 97, 97)];
     
     if (indexPath.section==0) {
         [cell.forwardButton setHidden:YES];
-        cell.textLabel.text = [index1Titles objectAtIndex:indexPath.row];
-        if ([cell.textLabel.text isEqualToString:@"Firstname"] || [cell.textLabel.text isEqualToString:@"Lastname"]) {
+        cell.indexLabel.text = [index1Titles objectAtIndex:indexPath.row];
+        if ([cell.indexLabel.text isEqualToString:@"Firstname"] || [cell.indexLabel.text isEqualToString:@"Lastname"]) {
             [cell.textField setHidden:NO];
             cell.textField.userInteractionEnabled=NO;
-            if ([cell.textLabel.text isEqualToString:@"Firstname"]) {
+            if ([cell.indexLabel.text isEqualToString:@"Firstname"]) {
                 [cell.textField setTag:1];
                 cell.textField.text=user.firstName;
                 if (cell.textField.text) {
                     user.firstName=cell.textField.text;
                 }
             }
-            else if(user && [cell.textLabel.text isEqualToString:@"Lastname"])
+            else if(user && [cell.indexLabel.text isEqualToString:@"Lastname"])
             {
                 [cell.textField setTag:2];
                 cell.textField.text=user.lastName;
@@ -326,14 +326,14 @@ static NSString *cellIdentifier = @"SettingTableViewCell";
             }
             else
             {
-                [cell.textField setPlaceholder:cell.textLabel.text];
+                [cell.textField setPlaceholder:cell.indexLabel.text];
             }
             if (save)
             {
                 cell.textField.userInteractionEnabled=YES;
             }
         }
-        if ([cell.textLabel.text isEqualToString:@"Profile Picture"])
+        if ([cell.indexLabel.text isEqualToString:@"Profile Picture"])
         {
             [cell.profileImageView setHidden:NO];
             if (![self.editButton.titleLabel.text isEqualToString:kSave] && !self.originalImage)
@@ -359,11 +359,11 @@ static NSString *cellIdentifier = @"SettingTableViewCell";
     }
     
     if (indexPath.section==1) {
-        cell.textLabel.text = [index2Titles objectAtIndex:indexPath.row];
+        cell.indexLabel.text = [index2Titles objectAtIndex:indexPath.row];
     }
     
     if (indexPath.section==2) {
-        cell.textLabel.text = [index3Titles objectAtIndex:indexPath.row];
+        cell.indexLabel.text = [index3Titles objectAtIndex:indexPath.row];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

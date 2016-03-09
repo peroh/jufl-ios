@@ -35,6 +35,21 @@
 #define KTermsPolicy @"term-policy"
 #define KPrivacyPolicy @"privacy-policy"
 
+//Chat services
+#define kGetGroupChatService @"get-group-chat"
+#define kGetPrivateChatService @"get-private-chat"
+#define kGetEventNotification @"event-notification-setting"
+
+#define kGetLatestPrivateChatService @"get-refresh-private-chat"
+#define kGetLatestGroupChatService @"get-refresh-public-chat"
+
+#define kPostGroupChatService @"group-chat"
+#define kPostPrivateChatService @"private-chat"
+
+#define kChatListService @"event-member-list"
+
+
+
 //Web service keys
 #define kCountryCode @"country_code"
 #define kDeviceToken @"device_token"
@@ -69,12 +84,45 @@
 #define kNotificationInvite @"event_invite"
 #define kNotificationEdit @"event_edit"
 #define kNotificationCancel @"event_cancel"
+
+//dhirendra cahnge
+#define kParticipantList @"participant list"
+#define kBadgeCount @"badgeCount"
+#define kChatImagePath @"path"
+#define kDateTime @"date_time"
+#define kReceiptId @"receipt_id" //to user id
+#define kSenderId @"sender_id" //selected member from private list user id
+#define kLastMsgId @"last_msg_id"
+#define kLatestMsgId @"last_msg_id"
+#define kChatMessage @"message"
+#define kChatInfo @"chatInfo"
+#define kUserInfo @"userInfo"
+#define kBadgeCount @"badgeCount"
+#define kGroupUnreadMsgCount @"groupBadgeCount"
+#define kPrivateUnreadMsgCount @"privateBadgeCount"
+
+
+#define kNotificationInviteeNotiication @"event_status_update"
+#define kNotificationActivityScheduled @"event_reminder_status"
+#define kNotificationChat @"chat_notification"
+#define kNotificationEvent @"event_notification"
+
+/////////
+
 #define kGoingCount @"going_count"
+
+#define kGoingBagdeCount @"badge_going_count"
+#define kCantGoingBadgeCount @"badgecantgo_count"
+
+#define kTabGoing  @"going"
+#define kShowing @"showing"
+
 #define kReason @"reason"
 #define kAlert @"alert"
 
 #define kAps @"aps"
 #define kPushTag @"push_tag"
+
 
 
 //.........................................Four Square/..................................

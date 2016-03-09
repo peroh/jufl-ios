@@ -113,8 +113,6 @@ static NSString *selectCellId = @"SelectAllTableViewCell";
     [self changeShowAllButtonState];
     [self changeViewLayout];
     [self.contactsTableView reloadData];
-    
-    
 }
 #pragma mark - My functions
 - (void)checkContactPermission {

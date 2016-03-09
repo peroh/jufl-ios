@@ -148,10 +148,16 @@
                 /*
                  Increase count for Notification
                  */
+                 int pushTag = [numberValue(aps[kPushTag]) intValue];
+                if (pushTag==6) {
+                    AppSharedClass.notificationCount = nil;
+                }
+                else{
                 if(AppSharedClass.notificationCount)
                     AppSharedClass.notificationCount = [NSNumber numberWithInt:AppSharedClass.notificationCount.intValue+1].stringValue;
                 else
                     AppSharedClass.notificationCount = @"1";
+                }
                 
                 [[visibleViewController.tabBarController.tabBar.items objectAtIndex:4] setBadgeValue:AppSharedClass.notificationCount];
                 

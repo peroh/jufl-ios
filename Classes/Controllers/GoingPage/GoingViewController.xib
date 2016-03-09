@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <customFonts key="customFonts">
+        <mutableArray key="Proxima Nova Regular.otf">
+            <string>ProximaNova-Regular</string>
+            <string>ProximaNova-Regular</string>
+        </mutableArray>
         <mutableArray key="ProximaNova-Light.otf">
             <string>ProximaNova-Light</string>
             <string>ProximaNova-Light</string>
             <string>ProximaNova-Light</string>
             <string>ProximaNova-Light</string>
             <string>ProximaNova-Light</string>
-        </mutableArray>
-        <mutableArray key="ProximaNova-Regular.otf">
-            <string>ProximaNova-Regular</string>
-            <string>ProximaNova-Regular</string>
         </mutableArray>
         <mutableArray key="ProximaNova-Semibold.otf">
             <string>ProximaNova-Semibold</string>
@@ -92,9 +93,6 @@
                         <constraint firstAttribute="bottom" secondItem="3SK-VK-seD" secondAttribute="bottom" constant="6" id="qUU-nz-H9x"/>
                         <constraint firstAttribute="height" constant="70" id="yCJ-hW-Qf8"/>
                     </constraints>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
-                    </variation>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w8U-tb-UM0">
                     <rect key="frame" x="0.0" y="70" width="320" height="498"/>
@@ -102,7 +100,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="97R-DZ-9s1">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gbJ-6f-5u1">
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gbJ-6f-5u1">
                                     <rect key="frame" x="25" y="10" width="130" height="27"/>
                                     <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
                                     <state key="normal" title="Going">
@@ -112,11 +110,14 @@
                                     <state key="selected">
                                         <color key="titleColor" red="0.97254901959999995" green="0.31372549020000001" blue="0.30196078430000001" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
+                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                        <rect key="frame" x="25" y="10" width="130" height="30"/>
+                                    </variation>
                                     <connections>
                                         <action selector="goingClicked:" destination="-1" eventType="touchUpInside" id="4cd-Sz-8PJ"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Id6-Uf-Uzl">
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Id6-Uf-Uzl">
                                     <rect key="frame" x="165" y="10" width="130" height="27"/>
                                     <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="15"/>
                                     <state key="normal" title="Invited">
@@ -126,6 +127,9 @@
                                     <state key="selected">
                                         <color key="titleColor" red="0.97254901959999995" green="0.31372549020000001" blue="0.30196078430000001" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
+                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                        <rect key="frame" x="165" y="10" width="130" height="30"/>
+                                    </variation>
                                     <connections>
                                         <action selector="invitedClicked:" destination="-1" eventType="touchUpInside" id="TVT-Qm-pzK"/>
                                     </connections>
@@ -190,9 +194,6 @@
                         <constraint firstItem="Jkj-Kc-LTc" firstAttribute="leading" secondItem="w8U-tb-UM0" secondAttribute="leading" id="dgc-Fz-Xah"/>
                         <constraint firstAttribute="trailing" secondItem="97R-DZ-9s1" secondAttribute="trailing" id="jqF-Td-lpv"/>
                     </constraints>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="0.0" y="70" width="320" height="498"/>
-                    </variation>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JP1-8u-48f">
                     <rect key="frame" x="23" y="508" width="275" height="45"/>

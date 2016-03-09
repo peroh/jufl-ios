@@ -50,8 +50,10 @@
     self.additionalInfoText.layer.borderColor = Rgb2UIColor(170, 170, 170).CGColor;
     self.additionalInfoText.layer.borderWidth = 1.5;
     self.additionalInfoText.layer.cornerRadius = 1.0;
+    
     self.additionalInfoText.placeholder = @"Enter additional info.";
     self.additionalInfoText.placeholderColor = Rgb2UIColor(170, 170, 170);
+    
 //    self.additionalInfoText.textContainer.maximumNumberOfLines = 6;
     
     [self.additionalInfoText becomeFirstResponder];

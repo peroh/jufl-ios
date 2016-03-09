@@ -81,4 +81,15 @@ typedef NS_ENUM(NSUInteger, ListNotificationType) {
     ListNotificationTypeUpdate,
     ListNotificationTypeCancel
 };
+
+typedef NS_ENUM(NSUInteger, ChatViewMode) {
+    ChatModeGroup = 0,
+    ChatModeSingle
+};
+
+typedef NS_ENUM(NSUInteger, ChatGroupMuteNotiMode) {
+    NotiModeMute = 0,
+    NotiModeUnmute
+};
+
 #endif

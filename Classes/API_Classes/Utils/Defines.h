@@ -26,12 +26,12 @@
 #ifdef DEBUG
 #   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #else
-#   define DLog(...)
+#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__) //DLog(...)//dhirendra cahnge
 #endif
 
 
 
-////////-----------------....................Application .......................//////////
+////////....................Application .......................//////////
 
 #define AppSharedClass [SharedClass sharedInstance]
 
